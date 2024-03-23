@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Currency</title>
+</head>
+<body>
+<h1>Add New Currency</h1>
+
+<!-- Форма добавления новой валюты -->
+<form action="#" th:action="@{/currency/add}" th:object="${currency}" method="post">
+    <label for="name">Currency Name:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <label for="code">Currency Code:</label>
+    <input type="text" id="code" th:field="*{code}" required>
+
+    <label for="rate">Currency Rate:</label>
+    <input type="number" id="rate" th:field="*{rate}" required>
+
+    <button type="submit">Add Currency</button>
+</form>
+</body>
+</html>
