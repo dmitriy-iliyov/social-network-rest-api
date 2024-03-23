@@ -1,17 +1,24 @@
 package com.example.exchangeraterestapi.entitys;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
+
+import static jakarta.persistence.GenerationType.SEQUENCE;
+
 
 @Data
 @Table
-@Entity(name="currency's")
+@Entity(name="currencys")
 public class CurrencyEntity {
 
     @Id
+    @SequenceGenerator(name = "currency_sequence", sequenceName = "currency_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = SEQUENCE, generator = "currency_sequence")
     private Long id;
 
+    @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    private String name;
+
+    @Column(name = "password", nullable = false, columnDefinition = "TEXT")
+    private String password;
 }
