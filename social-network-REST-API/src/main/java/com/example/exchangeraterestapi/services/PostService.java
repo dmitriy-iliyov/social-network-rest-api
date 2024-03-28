@@ -1,0 +1,41 @@
+package com.example.exchangeraterestapi.services;
+
+import com.example.exchangeraterestapi.DTO.CategoryDTO;
+import com.example.exchangeraterestapi.DTO.PostDTO;
+import com.example.exchangeraterestapi.entitys.PostEntity;
+import com.example.exchangeraterestapi.repositorys.PostRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@AllArgsConstructor
+public class PostService {
+
+    private final PostRepository postRepository;
+
+    @Transactional
+    public void save(PostEntity postEntity){
+        postRepository.save(postEntity);
+    }
+
+    @Transactional
+    public Optional<PostDTO> findById(Long id){
+        return postRepository.findById(id).map(PostDTO::toDTO);
+    }
+
+    @Transactional
+    public Iterable<PostDTO> findAll(){
+        List<PostDTO> postDTOS = new ArrayList<>();
+        postRepository.findAll().forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        return postDTOS;
+    }
+    @Transactional
+    public void deleteById(Long id){
+        postRepository.deleteById(id);
+    }
+}

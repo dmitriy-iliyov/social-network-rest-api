@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>exchange-rate-REST-API</artifactId>
+    <artifactId>social-network-REST-API</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>exchange-rate-REST-API</name>
     <description>exchange-rate-REST-API</description>

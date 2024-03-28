@@ -5,15 +5,14 @@ import lombok.Data;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
-
 @Data
 @Table
-@Entity(name="currencys")
-public class CurrencyEntity {
+@Entity(name="admins")
+public class AdminEntity {
 
     @Id
-    @SequenceGenerator(name = "currency_sequence", sequenceName = "currency_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = SEQUENCE, generator = "currency_sequence")
+    @SequenceGenerator(name = "admin_sequence", sequenceName = "admin_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = SEQUENCE, generator = "admin_sequence")
     private Long id;
 
     @Column(name = "name", nullable = false, columnDefinition = "TEXT")

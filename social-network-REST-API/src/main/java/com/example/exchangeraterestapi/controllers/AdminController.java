@@ -1,6 +1,5 @@
 package com.example.exchangeraterestapi.controllers;
 
-import com.example.exchangeraterestapi.DTO.AdminDTO;
 import com.example.exchangeraterestapi.entitys.AdminEntity;
 import com.example.exchangeraterestapi.services.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +22,11 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    @ResponseBody
-    public AdminDTO saveNewAdmin(@ModelAttribute AdminEntity admin){
-        adminService.save(admin);
-        return adminService.toDTO(admin);
+    public void saveNewAdmin(@ModelAttribute AdminEntity admin){
+        adminService.save(admin);;
     }
+
+    @GetMapping()
 
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,8 +26,10 @@ public class AdminService {
     }
 
     @Transactional
-    public Iterable<AdminEntity> findAll(){
-        return adminRepository.findAll();
+    public Iterable<AdminDTO> findAll() {
+        List<AdminDTO> adminDTOs = new ArrayList<>();
+        adminRepository.findAll().forEach(adminEntity -> adminDTOs.add(AdminDTO.toDTO(adminEntity)));
+        return adminDTOs;
     }
 
     @Transactional
@@ -33,7 +37,8 @@ public class AdminService {
         adminRepository.deleteById(id);
     }
 
-    public AdminDTO toDTO(AdminEntity adminEntity){
-        return new AdminDTO(adminEntity.getId(), adminEntity.getName(), adminEntity.getName());
+    @Transactional
+    public void deleteByPassword(String password){
+        adminRepository.deleteByPassword(password);
     }
 }
