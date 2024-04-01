@@ -29,11 +29,40 @@ public class PostService {
     }
 
     @Transactional
-    public Iterable<PostDTO> findAll(){
+    public List<PostDTO> findAllByUserId(Long id){
+        List<PostDTO> postDTOS = new ArrayList<>();
+        postRepository.findAllByUserId(id).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        return postDTOS;
+    }
+
+    @Transactional
+    public List<PostDTO> findAllByUserName(String name){
+        List<PostDTO> postDTOS = new ArrayList<>();
+        postRepository.findAllByUserName(name).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        return postDTOS;
+    }
+
+    @Transactional
+    public List<PostDTO> findAllByCategoryId(Long id){
+        List<PostDTO> postDTOS = new ArrayList<>();
+        postRepository.findAllByCategoryId(id).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        return postDTOS;
+    }
+
+    @Transactional
+    public List<PostDTO> findAllByCategoryName(String name){
+        List<PostDTO> postDTOS = new ArrayList<>();
+        postRepository.findAllByCategoryName(name).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        return postDTOS;
+    }
+
+    @Transactional
+    public List<PostDTO> findAll(){
         List<PostDTO> postDTOS = new ArrayList<>();
         postRepository.findAll().forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
         return postDTOS;
     }
+
     @Transactional
     public void deleteById(Long id){
         postRepository.deleteById(id);

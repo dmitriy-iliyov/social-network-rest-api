@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -18,10 +19,10 @@ public class UserDTO {
     private String password;
     private String email;
     private Instant createDate;
-    private Set<PostEntity> postEntitySet;
+    private List<PostEntity> posts;
 
 
     public static UserDTO toDTO(UserEntity userEntity){
-        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getCreateDate(), userEntity.getPostEntitySet());
+        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getCreateDate(), userEntity.getPosts());
     }
 }

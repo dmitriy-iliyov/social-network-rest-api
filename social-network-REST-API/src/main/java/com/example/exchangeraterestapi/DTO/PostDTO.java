@@ -12,10 +12,11 @@ public class PostDTO {
 
     private Long id;
     private String topic;
+    private String description;
     private UserEntity userEntity;
     private CategoryEntity categoryEntity;
 
     public static PostDTO toDTO(PostEntity postEntity){
-        return new PostDTO(postEntity.getId(), postEntity.getTopic(), postEntity.getUserEntity(), postEntity.getCategoryEntity());
+        return new PostDTO(postEntity.getId(), postEntity.getTopic(), postEntity.getDescription(),postEntity.getUser(), postEntity.getCategory());
     }
 }

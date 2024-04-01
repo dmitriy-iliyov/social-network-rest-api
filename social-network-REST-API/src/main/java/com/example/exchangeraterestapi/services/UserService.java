@@ -33,7 +33,7 @@ public class UserService {
     }
 
     @Transactional
-    public Iterable<UserDTO> findAll(){
+    public List<UserDTO> findAll(){
         List<UserDTO> userDTOS = new ArrayList<>();
         userRepository.findAll().forEach(userEntity -> userDTOS.add(UserDTO.toDTO(userEntity)));
         return userDTOS;

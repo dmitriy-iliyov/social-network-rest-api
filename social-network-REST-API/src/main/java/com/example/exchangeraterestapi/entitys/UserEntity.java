@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -31,5 +32,9 @@ public class UserEntity {
     private Instant createDate;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<PostEntity> postEntitySet;
+    private List<PostEntity> posts;
+
+    public UserEntity(){
+        this.createDate = Instant.now();
+    }
 }

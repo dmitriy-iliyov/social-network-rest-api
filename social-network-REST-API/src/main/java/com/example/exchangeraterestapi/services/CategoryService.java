@@ -34,7 +34,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Iterable<CategoryDTO> findAll(){
+    public List<CategoryDTO> findAll(){
         List<CategoryDTO> categoryDTOS = new ArrayList<>();
         categoryRepository.findAll().forEach(categoryEntity -> categoryDTOS.add(CategoryDTO.toDTO(categoryEntity)));
         return categoryDTOS;

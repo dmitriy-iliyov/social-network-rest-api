@@ -18,11 +18,14 @@ public class PostEntity {
     @Column(name = "topic", nullable = false, columnDefinition = "TEXT")
     private String topic;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable = false)
-    private UserEntity userEntity;
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
-    private CategoryEntity categoryEntity;
+    @JoinColumn(name="user_id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private CategoryEntity category;
 }

@@ -2,7 +2,11 @@ package com.example.exchangeraterestapi.entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -21,5 +25,5 @@ public class CategoryEntity {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private Set<PostEntity> postEntitySet;
+    private List<PostEntity> posts;
 }

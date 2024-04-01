@@ -7,6 +7,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PostRepository extends CrudRepository<PostEntity, Long> {
 
-    Iterable<PostEntity> findAllByCategoryEntity(CategoryEntity categoryEntity);
-    Iterable<PostEntity> findAllByUserEntity(UserEntity userEntity);
+    Iterable<PostEntity> findAllByUserId(Long userID);
+    Iterable<PostEntity> findAllByUserName(String name);
+    Iterable<PostEntity> findAllByCategoryId(Long categoryID);
+    Iterable<PostEntity> findAllByCategoryName(String name);
 }
