@@ -1,6 +1,6 @@
-package com.example.exchangeraterestapi.DTO;
+package com.example.socialnetworkrestapi.DTO;
 
-import com.example.exchangeraterestapi.entitys.AdminEntity;
+import com.example.socialnetworkrestapi.entitys.AdminEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

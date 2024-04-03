@@ -1,10 +1,10 @@
-package com.example.exchangeraterestapi;
+package com.example.socialnetworkrestapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExchangeRateRestApiApplicationTests {
+class SocialNetworkRestApiApplicationTests {
 
     @Test
     void contextLoads() {

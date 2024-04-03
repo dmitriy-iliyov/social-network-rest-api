@@ -1,13 +1,9 @@
-package com.example.exchangeraterestapi.entitys;
+package com.example.socialnetworkrestapi.entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 

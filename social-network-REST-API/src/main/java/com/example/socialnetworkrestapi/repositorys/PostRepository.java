@@ -1,8 +1,6 @@
-package com.example.exchangeraterestapi.repositorys;
+package com.example.socialnetworkrestapi.repositorys;
 
-import com.example.exchangeraterestapi.entitys.CategoryEntity;
-import com.example.exchangeraterestapi.entitys.PostEntity;
-import com.example.exchangeraterestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.entitys.PostEntity;
 import org.springframework.data.repository.CrudRepository;
 
 public interface PostRepository extends CrudRepository<PostEntity, Long> {

@@ -1,14 +1,13 @@
-package com.example.exchangeraterestapi.DTO;
+package com.example.socialnetworkrestapi.DTO;
 
 
-import com.example.exchangeraterestapi.entitys.PostEntity;
-import com.example.exchangeraterestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.entitys.PostEntity;
+import com.example.socialnetworkrestapi.entitys.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

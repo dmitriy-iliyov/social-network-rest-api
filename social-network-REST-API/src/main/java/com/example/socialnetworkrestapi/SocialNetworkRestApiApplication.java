@@ -1,4 +1,4 @@
-package com.example.exchangeraterestapi;
+package com.example.socialnetworkrestapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaRepositories
-public class ExchangeRateRestApiApplication {
+public class SocialNetworkRestApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ExchangeRateRestApiApplication.class, args);
+        SpringApplication.run(SocialNetworkRestApiApplication.class, args);
     }
 
 }

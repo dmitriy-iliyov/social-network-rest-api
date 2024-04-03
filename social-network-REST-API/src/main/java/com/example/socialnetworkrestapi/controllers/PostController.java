@@ -1,13 +1,12 @@
-package com.example.exchangeraterestapi.controllers;
+package com.example.socialnetworkrestapi.controllers;
 
-import com.example.exchangeraterestapi.DTO.PostDTO;
-import com.example.exchangeraterestapi.entitys.PostEntity;
-import com.example.exchangeraterestapi.services.PostService;
+import com.example.socialnetworkrestapi.DTO.PostDTO;
+import com.example.socialnetworkrestapi.entitys.PostEntity;
+import com.example.socialnetworkrestapi.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

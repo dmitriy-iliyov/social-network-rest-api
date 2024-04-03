@@ -1,8 +1,8 @@
-package com.example.exchangeraterestapi.controllers;
+package com.example.socialnetworkrestapi.controllers;
 
-import com.example.exchangeraterestapi.DTO.AdminDTO;
-import com.example.exchangeraterestapi.entitys.AdminEntity;
-import com.example.exchangeraterestapi.services.AdminService;
+import com.example.socialnetworkrestapi.DTO.AdminDTO;
+import com.example.socialnetworkrestapi.entitys.AdminEntity;
+import com.example.socialnetworkrestapi.services.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

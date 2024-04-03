@@ -1,4 +1,4 @@
-package com.example.exchangeraterestapi.entitys;
+package com.example.socialnetworkrestapi.entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package com.example.exchangeraterestapi.services;
+package com.example.socialnetworkrestapi.services;
 
-import com.example.exchangeraterestapi.DTO.AdminDTO;
-import com.example.exchangeraterestapi.entitys.AdminEntity;
-import com.example.exchangeraterestapi.repositorys.AdminRepository;
+import com.example.socialnetworkrestapi.DTO.AdminDTO;
+import com.example.socialnetworkrestapi.entitys.AdminEntity;
+import com.example.socialnetworkrestapi.repositorys.AdminRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

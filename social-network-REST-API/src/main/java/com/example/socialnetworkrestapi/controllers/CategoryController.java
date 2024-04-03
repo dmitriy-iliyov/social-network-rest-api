@@ -1,14 +1,13 @@
-package com.example.exchangeraterestapi.controllers;
+package com.example.socialnetworkrestapi.controllers;
 
 
-import com.example.exchangeraterestapi.DTO.CategoryDTO;
-import com.example.exchangeraterestapi.entitys.CategoryEntity;
-import com.example.exchangeraterestapi.services.CategoryService;
+import com.example.socialnetworkrestapi.DTO.CategoryDTO;
+import com.example.socialnetworkrestapi.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

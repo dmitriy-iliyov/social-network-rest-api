@@ -1,8 +1,8 @@
-package com.example.exchangeraterestapi.controllers;
+package com.example.socialnetworkrestapi.controllers;
 
-import com.example.exchangeraterestapi.DTO.UserDTO;
-import com.example.exchangeraterestapi.entitys.UserEntity;
-import com.example.exchangeraterestapi.services.UserService;
+import com.example.socialnetworkrestapi.DTO.UserDTO;
+import com.example.socialnetworkrestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
