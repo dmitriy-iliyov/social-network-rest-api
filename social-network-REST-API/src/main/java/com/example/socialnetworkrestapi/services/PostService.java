@@ -28,30 +28,9 @@ public class PostService {
     }
 
     @Transactional
-    public List<PostDTO> findAllByUserId(Long id){
+    public List<PostDTO> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(Long userId, String userName, Long categoryId, String categoryName){
         List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAllByUserId(id).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
-        return postDTOS;
-    }
-
-    @Transactional
-    public List<PostDTO> findAllByUserName(String name){
-        List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAllByUserName(name).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
-        return postDTOS;
-    }
-
-    @Transactional
-    public List<PostDTO> findAllByCategoryId(Long id){
-        List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAllByCategoryId(id).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
-        return postDTOS;
-    }
-
-    @Transactional
-    public List<PostDTO> findAllByCategoryName(String name){
-        List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAllByCategoryName(name).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+        postRepository.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
         return postDTOS;
     }
 

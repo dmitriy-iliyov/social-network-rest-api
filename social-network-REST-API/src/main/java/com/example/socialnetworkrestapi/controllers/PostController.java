@@ -51,48 +51,21 @@ public class PostController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
     }
 
-    @GetMapping("/get/{userID}")
-    public ResponseEntity<List<PostDTO>> getAllPostByUserId(@PathVariable Long userID){
-        List<PostDTO> posts = postService.findAllByUserId(userID);
+    @GetMapping("/get")
+    public ResponseEntity<List<PostDTO>> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String userName,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) String categoryName){
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting all post by user id");
+        httpHeaders.add("X-info", "Getting all post by user id or name");
+
+        List<PostDTO> posts = postService.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName);
 
         return posts.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
                 : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(posts);
-    }
 
-    @GetMapping("/get/{userName}")
-    public ResponseEntity<List<PostDTO>> getAllPostByUserName(@PathVariable String userName){
-        List<PostDTO> posts = postService.findAllByUserName(userName);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting all post by user name");
-
-        return posts.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
-                : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(posts);
-    }
-
-    @GetMapping("/get/{categoryID}")
-    public ResponseEntity<List<PostDTO>> getAllPostByCategoryId(@PathVariable Long categoryID){
-        List<PostDTO> posts = postService.findAllByCategoryId(categoryID);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting all post by category id");
-
-        return posts.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
-                : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(posts);
-    }
-
-    @GetMapping("/get/{categoryName}")
-    public ResponseEntity<List<PostDTO>> getAllPostByCategoryName(@PathVariable String categoryName){
-        List<PostDTO> posts = postService.findAllByCategoryName(categoryName);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting all post by category name");
-
-        return posts.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
-                : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(posts);
     }
 
     @GetMapping("/all")

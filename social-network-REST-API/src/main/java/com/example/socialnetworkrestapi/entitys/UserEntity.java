@@ -30,7 +30,11 @@ public class UserEntity {
     @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
     private Instant createDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<PostEntity> posts;
 
     public UserEntity(){

@@ -13,10 +13,10 @@ public class PostDTO {
     private Long id;
     private String topic;
     private String description;
-    private UserEntity userEntity;
-    private CategoryEntity categoryEntity;
+    private Long userID;
+    private Long categoryID;
 
     public static PostDTO toDTO(PostEntity postEntity){
-        return new PostDTO(postEntity.getId(), postEntity.getTopic(), postEntity.getDescription(),postEntity.getUser(), postEntity.getCategory());
+        return new PostDTO(postEntity.getId(), postEntity.getTopic(), postEntity.getDescription(),postEntity.getUser().getId(), postEntity.getCategory().getId());
     }
 }

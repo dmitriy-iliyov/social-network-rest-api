@@ -18,10 +18,10 @@ public class UserDTO {
     private String password;
     private String email;
     private Instant createDate;
-    private List<PostEntity> posts;
+    private int postCount;
 
 
     public static UserDTO toDTO(UserEntity userEntity){
-        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getCreateDate(), userEntity.getPosts());
+        return new UserDTO(userEntity.getId(), userEntity.getName(), userEntity.getPassword(), userEntity.getEmail(), userEntity.getCreateDate(), userEntity.getPosts().size());
     }
 }

@@ -3,7 +3,11 @@ package com.example.socialnetworkrestapi.services;
 import com.example.socialnetworkrestapi.DTO.UserDTO;
 import com.example.socialnetworkrestapi.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.UserRepository;
+import com.example.socialnetworkrestapi.security.CurrentUserDetails;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +17,15 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
+        return CurrentUserDetails.build(userEntity);
+    }
 
     @Transactional
     public void save(UserEntity userEntity){
@@ -43,5 +53,4 @@ public class UserService {
     public void deleteById(Long id){
         userRepository.deleteById(id);
     }
-
 }

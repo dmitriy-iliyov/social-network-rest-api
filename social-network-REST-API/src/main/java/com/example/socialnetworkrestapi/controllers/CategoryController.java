@@ -5,6 +5,7 @@ import com.example.socialnetworkrestapi.DTO.CategoryDTO;
 import com.example.socialnetworkrestapi.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.services.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,36 +32,45 @@ public class CategoryController {
 
     @PostMapping("/new")
     public ResponseEntity<String> saveNewCategory(@ModelAttribute CategoryEntity categoryEntity){
-        categoryService.save(categoryEntity);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Creating category");
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .headers(httpHeaders)
-                .body("Category successfully created");
+        try {
+            categoryService.save(categoryEntity);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .headers(httpHeaders)
+                    .body("Category successfully created");
+        }catch (DataIntegrityViolationException exception){
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .headers(httpHeaders)
+                    .body("Category with this name "+ categoryEntity.getName() +" is exist");
+        }
     }
 
-    @GetMapping("/get/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
-        Optional<CategoryDTO> categoryOptional = categoryService.findById(id);
+    @GetMapping("/get")
+    public ResponseEntity<CategoryDTO> getCategoryByIdOrName(@RequestParam(required = false) Long id,
+                                                             @RequestParam(required = false) String name){
+
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting category by id");
+        httpHeaders.add("X-info", "Getting category");
 
-        return categoryOptional
-                .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
-    }
+        if (id != null) {
+            Optional<CategoryDTO> categoryOptional = categoryService.findById(id);
 
-    @GetMapping("/get/{name}")
-    public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name){
-        Optional<CategoryDTO> categoryOptional = categoryService.findByName(name);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting category by name");
+            return categoryOptional
+                    .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
+        } else if (name != null) {
+            Optional<CategoryDTO> categoryOptional = categoryService.findByName(name);
 
-        return categoryOptional
-                .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
+            return categoryOptional
+                    .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(httpHeaders).body(null);
+        }
     }
 
     @GetMapping("/all")

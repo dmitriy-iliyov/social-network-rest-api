@@ -20,6 +20,6 @@ public class CategoryEntity {
     @Column(name = "name", nullable = false, unique = true, columnDefinition = "TEXT")
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<PostEntity> posts;
 }

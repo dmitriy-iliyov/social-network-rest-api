@@ -1,96 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Currency Tracker</title>
+    <title>home page </title>
 </head>
 <body>
-<h1>Currency Tracker</h1>
-
-<!-- Форма отслеживания курса валют -->
-<h2>Отследить курс валюты</h2>
-<form action="/track" method="POST">
-    <label for="currency">Выберите валюту:</label>
-    <select name="currency" id="currency">
-        <option value="USD">USD</option>
-        <option value="EUR">EUR</option>
-        <option value="GBP">GBP</option>
-        <!-- Добавьте другие валюты по необходимости -->
-    </select>
-    <button type="submit">Отследить</button>
-</form>
-
-<!-- Форма регистрации -->
-<h2>Регистрация</h2>
-<form action="/register" method="POST">
-    <label for="username">Имя пользователя:</label>
-    <input type="text" id="username" name="username" required>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    <label for="password">Пароль:</label>
-    <input type="password" id="password" name="password" required>
-    <button type="submit">Зарегистрироваться</button>
-</form>
+<div></div>
+<a href = "/user/new">registration</a>
 </body>
 </html>
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>CurrencyLayer - Currency Exchange Rates & API</title>-->
-<!--    <style>-->
-<!--        /* Общие стили */-->
-<!--        body {-->
-<!--            font-family: Arial, sans-serif;-->
-<!--            margin: 0;-->
-<!--            padding: 0;-->
-<!--            background-image: url('background.jpg');-->
-<!--            background-size: cover;-->
-<!--            color: #333;-->
-<!--        }-->
-<!--        .overlay {-->
-<!--            background-color: rgba(255, 255, 255, 0.8);-->
-<!--            padding: 20px;-->
-<!--        }-->
-<!--        .container {-->
-<!--            max-width: 1200px;-->
-<!--            margin: 0 auto;-->
-<!--            padding: 20px;-->
-<!--        }-->
-<!--        h1, h2 {-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        p {-->
-<!--            text-align: center;-->
-<!--        }-->
-<!--        .button {-->
-<!--            display: inline-block;-->
-<!--            padding: 10px 20px;-->
-<!--            background-color: #007bff;-->
-<!--            color: #fff;-->
-<!--            text-decoration: none;-->
-<!--            border-radius: 4px;-->
-<!--            transition: background-color 0.3s;-->
-<!--        }-->
-<!--        .button:hover {-->
-<!--            background-color: #0056b3;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="overlay">-->
-<!--    <div class="container">-->
-<!--        <h1>Welcome to CurrencyLayer</h1>-->
-<!--        <p>Your source for accurate and reliable currency exchange rates</p>-->
-<!--        <h2>Start tracking currency rates today</h2>-->
-<!--        <p>Sign up now and get access to our powerful API</p>-->
-<!--        <a href="/register" class="button">Get Started</a>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</body>-->
-<!--</html>-->
-
-
