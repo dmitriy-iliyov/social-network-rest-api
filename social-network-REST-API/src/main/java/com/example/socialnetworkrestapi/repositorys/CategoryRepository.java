@@ -1,6 +1,6 @@
 package com.example.socialnetworkrestapi.repositorys;
 
-import com.example.socialnetworkrestapi.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
