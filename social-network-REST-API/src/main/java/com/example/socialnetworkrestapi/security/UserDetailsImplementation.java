@@ -6,15 +6,17 @@ import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class CurrentUserDetails implements UserDetails {
+public class UserDetailsImplementation implements UserDetails {
 
     private Long id;
     private String name;
@@ -22,22 +24,22 @@ public class CurrentUserDetails implements UserDetails {
     private String email;
     private Instant createDate;
     private Role role;
-    private List<PostEntity> posts;
+    private int postCount;
 
-    public static CurrentUserDetails build(UserEntity userEntity){
-        return new CurrentUserDetails(
+    public static UserDetailsImplementation build(UserEntity userEntity){
+        return new UserDetailsImplementation(
                 userEntity.getId(),
                 userEntity.getName(),
                 userEntity.getPassword(),
                 userEntity.getEmail(),
                 userEntity.getCreateDate(),
                 userEntity.getRole(),
-                userEntity.getPosts());
+                userEntity.getPosts().size());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singleton(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override
