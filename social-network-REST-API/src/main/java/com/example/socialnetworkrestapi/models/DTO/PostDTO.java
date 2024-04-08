@@ -1,8 +1,6 @@
-package com.example.socialnetworkrestapi.DTO;
+package com.example.socialnetworkrestapi.models.DTO;
 
-import com.example.socialnetworkrestapi.entitys.CategoryEntity;
-import com.example.socialnetworkrestapi.entitys.PostEntity;
-import com.example.socialnetworkrestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.models.entitys.PostEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
