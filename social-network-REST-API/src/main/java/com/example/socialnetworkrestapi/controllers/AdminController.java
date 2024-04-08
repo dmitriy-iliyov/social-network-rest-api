@@ -1,10 +1,9 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.DTO.AdminDTO;
-import com.example.socialnetworkrestapi.entitys.AdminEntity;
+import com.example.socialnetworkrestapi.models.DTO.AdminDTO;
+import com.example.socialnetworkrestapi.models.entitys.AdminEntity;
 import com.example.socialnetworkrestapi.services.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

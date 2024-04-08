@@ -1,23 +1,31 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.DTO.UserDTO;
-import com.example.socialnetworkrestapi.entitys.Role;
-import com.example.socialnetworkrestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.models.DTO.LogInUserDTO;
+import com.example.socialnetworkrestapi.models.DTO.ResponseUserDTO;
+import com.example.socialnetworkrestapi.models.entitys.Role;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.security.JwtCore;
 import com.example.socialnetworkrestapi.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.AuthenticationException;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,9 +48,14 @@ public class UserController {
 
     @PostMapping("/new")
     public ResponseEntity<String> saveNewUser(@ModelAttribute UserEntity userEntity){
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Creating user");
+
         userEntity.setRole(Role.USER);
+        String encodedUserPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedUserPassword);
+
         try{
             userService.save(userEntity);
             return ResponseEntity
@@ -51,26 +64,60 @@ public class UserController {
                     .body("User successfully created");
         }catch (DataIntegrityViolationException exception){
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
+                    .status(HttpStatus.SEE_OTHER)
                     .headers(httpHeaders)
-                    .body("User with name " + userEntity.getName() + " is exist");
+                    .location(URI.create("/user/auth"))
+                    .body("User with name " + userEntity.getName() + " already exists");
         }
     }
 
+    @GetMapping("/auth")
+    public String signingInUser(Model model){
+        model.addAttribute("user", new LogInUserDTO());
+
+        return "user_signing_in_form";
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<String> authenticateUser(@ModelAttribute LogInUserDTO user){
+
+
+        Authentication authentication;
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Authenticate user");
+
+        try{
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
+            System.out.println(authentication);
+            System.out.println(authentication.getDetails());
+        } catch (BadCredentialsException exception){
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .headers(httpHeaders)
+                    .body("Incorrect password");
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtCore.generateToken(authentication);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(httpHeaders)
+                .body(jwt);
+    }
+
     @GetMapping("/get")
-    public ResponseEntity<UserDTO> getUserByIdOrName(@RequestParam(required = false) String name, @RequestParam(required = false) Long id) {
+    public ResponseEntity<ResponseUserDTO> getUserByIdOrName(@RequestParam(required = false) String name, @RequestParam(required = false) Long id) {
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting user");
 
         if(name != null){
-            Optional<UserDTO> userOptional = userService.findByName(name);
-
+            Optional<ResponseUserDTO> userOptional = userService.findByName(name);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
         }else if(id != null){
-            Optional<UserDTO> userOptional = userService.findById(id);
-
+            Optional<ResponseUserDTO> userOptional = userService.findById(id);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
@@ -81,8 +128,10 @@ public class UserController {
 
     @GetMapping("/all")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.findAll();
+    public ResponseEntity<List<ResponseUserDTO>> getAllUsers() {
+
+        List<ResponseUserDTO> users = userService.findAll();
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting all users");
 
@@ -93,6 +142,7 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Deleting user by id");
 

@@ -1,7 +1,7 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.DTO.PostDTO;
-import com.example.socialnetworkrestapi.entitys.PostEntity;
+import com.example.socialnetworkrestapi.models.DTO.PostDTO;
+import com.example.socialnetworkrestapi.models.entitys.PostEntity;
 import com.example.socialnetworkrestapi.services.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

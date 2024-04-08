@@ -1,8 +1,8 @@
 package com.example.socialnetworkrestapi.controllers;
 
 
-import com.example.socialnetworkrestapi.DTO.CategoryDTO;
-import com.example.socialnetworkrestapi.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.DTO.CategoryDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
