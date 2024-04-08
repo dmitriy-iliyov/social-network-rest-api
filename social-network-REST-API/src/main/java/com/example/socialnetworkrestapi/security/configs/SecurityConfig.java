@@ -5,8 +5,11 @@ package com.example.socialnetworkrestapi.configs;
 import com.example.socialnetworkrestapi.security.TokenFilter;
 import com.example.socialnetworkrestapi.services.UserService;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +18,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,12 +32,17 @@ import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
-@NoArgsConstructor
+//@EnableMethodSecurity
 public class SecurityConfig {
 
-    private UserService userService;
-    private TokenFilter tokenFilter;
+    private final UserService userService;
+    private final TokenFilter tokenFilter;
+
+    @Autowired
+    public SecurityConfig(UserService userService, TokenFilter tokenFilter) {
+        this.userService = userService;
+        this.tokenFilter = tokenFilter;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -47,7 +56,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManagerBuilder configureAuthenticationManagerBuilder(
+    @Primary
+    public AuthenticationManagerBuilder configAuthenticationManagerBuilder(
             AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder;
@@ -64,7 +74,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/user/new").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/user/new", "/user/auth").permitAll()
                         .requestMatchers("/user/**").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
