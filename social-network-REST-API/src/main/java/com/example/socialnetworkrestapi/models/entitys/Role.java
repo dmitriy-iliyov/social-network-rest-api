@@ -1,4 +1,4 @@
-package com.example.socialnetworkrestapi.entitys;
+package com.example.socialnetworkrestapi.models.entitys;
 
 public enum Role {
     USER, ADMIN

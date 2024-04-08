@@ -1,4 +1,4 @@
-package com.example.socialnetworkrestapi.entitys;
+package com.example.socialnetworkrestapi.models.entitys;
 
 import jakarta.persistence.*;
 import lombok.Data;
