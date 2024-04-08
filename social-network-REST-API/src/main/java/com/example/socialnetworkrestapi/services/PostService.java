@@ -1,7 +1,7 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.DTO.PostDTO;
-import com.example.socialnetworkrestapi.entitys.PostEntity;
+import com.example.socialnetworkrestapi.models.DTO.PostDTO;
+import com.example.socialnetworkrestapi.models.entitys.PostEntity;
 import com.example.socialnetworkrestapi.repositorys.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

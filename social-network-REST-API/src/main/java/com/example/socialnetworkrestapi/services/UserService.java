@@ -1,9 +1,9 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.DTO.UserDTO;
-import com.example.socialnetworkrestapi.entitys.UserEntity;
+import com.example.socialnetworkrestapi.models.DTO.ResponseUserDTO;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.UserRepository;
-import com.example.socialnetworkrestapi.security.CurrentUserDetails;
+import com.example.socialnetworkrestapi.security.UserDetailsImplementation;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", username)));
-        return CurrentUserDetails.build(userEntity);
+        return UserDetailsImplementation.build(userEntity);
     }
 
     @Transactional
@@ -33,19 +33,24 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Optional<UserDTO> findById(Long id){
-        return userRepository.findById(id).map(UserDTO::toDTO);
+    public boolean existingUserEntityByName(String name){
+        return userRepository.existsUserEntityByName(name);
     }
 
     @Transactional
-    public Optional<UserDTO> findByName(String name){
-        return userRepository.findByName(name).map(UserDTO::toDTO);
+    public Optional<ResponseUserDTO> findById(Long id){
+        return userRepository.findById(id).map(ResponseUserDTO::toDTO);
     }
 
     @Transactional
-    public List<UserDTO> findAll(){
-        List<UserDTO> userDTOS = new ArrayList<>();
-        userRepository.findAll().forEach(userEntity -> userDTOS.add(UserDTO.toDTO(userEntity)));
+    public Optional<ResponseUserDTO> findByName(String name){
+        return userRepository.findByName(name).map(ResponseUserDTO::toDTO);
+    }
+
+    @Transactional
+    public List<ResponseUserDTO> findAll(){
+        List<ResponseUserDTO> userDTOS = new ArrayList<>();
+        userRepository.findAll().forEach(userEntity -> userDTOS.add(ResponseUserDTO.toDTO(userEntity)));
         return userDTOS;
     }
 

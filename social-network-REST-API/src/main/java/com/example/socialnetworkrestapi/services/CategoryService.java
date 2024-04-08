@@ -1,7 +1,7 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.DTO.CategoryDTO;
-import com.example.socialnetworkrestapi.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.DTO.CategoryDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.repositorys.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

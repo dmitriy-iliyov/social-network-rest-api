@@ -1,7 +1,7 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.DTO.AdminDTO;
-import com.example.socialnetworkrestapi.entitys.AdminEntity;
+import com.example.socialnetworkrestapi.models.DTO.AdminDTO;
+import com.example.socialnetworkrestapi.models.entitys.AdminEntity;
 import com.example.socialnetworkrestapi.repositorys.AdminRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
