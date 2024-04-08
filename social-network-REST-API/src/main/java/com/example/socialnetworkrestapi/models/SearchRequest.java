@@ -1,4 +1,4 @@
-package com.example.socialnetworkrestapi.search;
+package com.example.socialnetworkrestapi.models;
 
 import lombok.Data;
 
