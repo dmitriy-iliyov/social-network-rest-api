@@ -1,7 +1,9 @@
 package com.example.socialnetworkrestapi.models.entitys;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -9,6 +11,8 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name="categories")
 public class CategoryEntity {
 
@@ -22,4 +26,8 @@ public class CategoryEntity {
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<PostEntity> posts;
+
+    public CategoryEntity(String name){
+        this.name = name;
+    }
 }

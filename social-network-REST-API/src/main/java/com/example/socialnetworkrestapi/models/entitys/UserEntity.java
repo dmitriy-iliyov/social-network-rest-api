@@ -1,7 +1,10 @@
 package com.example.socialnetworkrestapi.models.entitys;
 
+import com.example.socialnetworkrestapi.models.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.List;
@@ -10,6 +13,8 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name="users")
 public class UserEntity {
 
@@ -28,7 +33,7 @@ public class UserEntity {
     private String email;
 
     @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
-    private Instant createDate;
+    private Instant createDate = Instant.now();
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -37,7 +42,10 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<PostEntity> posts;
 
-    public UserEntity(){
-        this.createDate = Instant.now();
+    public UserEntity(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = Role.USER;
     }
 }

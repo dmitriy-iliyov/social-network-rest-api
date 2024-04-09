@@ -1,12 +1,16 @@
 package com.example.socialnetworkrestapi.models.entitys;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
 @Table
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name="posts")
 public class PostEntity {
 
@@ -28,4 +32,11 @@ public class PostEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id")
     private CategoryEntity category;
+
+    public PostEntity(String topic, String description, UserEntity user, CategoryEntity category){
+        this.topic = topic;
+        this.description = description;
+        this.user = user;
+        this.category = category;
+    }
 }
