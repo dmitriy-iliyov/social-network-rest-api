@@ -1,7 +1,7 @@
 package com.example.socialnetworkrestapi.controllers;
 
 
-import com.example.socialnetworkrestapi.models.DTO.CategoryDTO;
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
 import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.services.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/new")
-    public String addNewCategory(Model model){
+    public String addNewCategoryForm(Model model){
         model.addAttribute("category", new CategoryEntity());
 
         return "category_register_form";
@@ -50,20 +50,20 @@ public class CategoryController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<CategoryDTO> getCategoryByIdOrName(@RequestParam(required = false) Long id,
-                                                             @RequestParam(required = false) String name){
+    public ResponseEntity<CategoryResponseDTO> getCategoryByIdOrName(@RequestParam(required = false) Long id,
+                                                                     @RequestParam(required = false) String name){
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting category");
 
         if (id != null) {
-            Optional<CategoryDTO> categoryOptional = categoryService.findById(id);
+            Optional<CategoryResponseDTO> categoryOptional = categoryService.findById(id).map(CategoryResponseDTO::toDTO);
 
             return categoryOptional
                     .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
         } else if (name != null) {
-            Optional<CategoryDTO> categoryOptional = categoryService.findByName(name);
+            Optional<CategoryResponseDTO> categoryOptional = categoryService.findByName(name).map(CategoryResponseDTO::toDTO);
 
             return categoryOptional
                     .map(categoryDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(categoryDTO))
@@ -74,8 +74,8 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(){
-        List<CategoryDTO> categories = categoryService.findAll();
+    public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
+        List<CategoryResponseDTO> categories = categoryService.findAll();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting all category");
 

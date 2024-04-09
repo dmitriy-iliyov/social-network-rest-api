@@ -1,9 +1,16 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.models.DTO.PostDTO;
-import com.example.socialnetworkrestapi.models.entitys.PostEntity;
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
+import com.example.socialnetworkrestapi.models.DTO.post.PostCreatingDTO;
+import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
+import com.example.socialnetworkrestapi.services.CategoryService;
 import com.example.socialnetworkrestapi.services.PostService;
+import com.example.socialnetworkrestapi.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +28,35 @@ public class PostController {
 
     private final PostService postService;
 
+
     @GetMapping("/new")
-    public String addNewPost(Model model) {
-        model.addAttribute("post", new PostEntity());
+    public String addNewPostForm(Model model) {
+        model.addAttribute("post", new PostCreatingDTO());
 
         return "post_register_form";
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> saveNewPost(@ModelAttribute PostEntity postEntity) {
-        postService.save(postEntity);
+    public ResponseEntity<String> saveNewPost(@ModelAttribute PostCreatingDTO post) {
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Post successfully created");
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .headers(httpHeaders)
-                .body("Post successfully created");
+        httpHeaders.add("X-info", "Creating post");
+         try {
+             postService.save(post);
+             return ResponseEntity
+                     .status(HttpStatus.CREATED)
+                     .headers(httpHeaders)
+                     .body("Post successfully created");
+         } catch (ChangeSetPersister.NotFoundException e){
+             return ResponseEntity
+                     .status(HttpStatus.NOT_FOUND)
+                     .headers(httpHeaders)
+                     .body("User or category doesn't exist");
+         }
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<PostDTO> getPostById(@PathVariable Long id){
-        Optional<PostDTO> postOptional = postService.findById(id);
+    public ResponseEntity<PostResponseDTO> getPostById(@PathVariable Long id){
+        Optional<PostResponseDTO> postOptional = postService.findById(id);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting post by id");
 
@@ -52,7 +66,7 @@ public class PostController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<List<PostDTO>> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(
+    public ResponseEntity<List<PostResponseDTO>> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) Long categoryId,
@@ -60,7 +74,7 @@ public class PostController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting all post by user id or name");
 
-        List<PostDTO> posts = postService.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName);
+        List<PostResponseDTO> posts = postService.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName);
 
         return posts.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
@@ -69,8 +83,8 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostDTO>> getAllPosts(){
-        List<PostDTO> posts = postService.findAll();
+    public ResponseEntity<List<PostResponseDTO>> getAllPosts(){
+        List<PostResponseDTO> posts = postService.findAll();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting all posts");
 

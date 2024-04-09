@@ -1,23 +1,18 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.models.DTO.LogInUserDTO;
-import com.example.socialnetworkrestapi.models.DTO.ResponseUserDTO;
-import com.example.socialnetworkrestapi.models.entitys.Role;
-import com.example.socialnetworkrestapi.models.entitys.UserEntity;
+import com.example.socialnetworkrestapi.models.DTO.user.UserLogInDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.UserRegistrationDTO;
 import com.example.socialnetworkrestapi.security.JwtCore;
 import com.example.socialnetworkrestapi.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,24 +35,23 @@ public class UserController {
     private final JwtCore jwtCore;
 
     @GetMapping("/new")
-    public String registerNewUser(Model model){
-        model.addAttribute("user", new UserEntity());
+    public String registerNewUserForm(Model model){
+        model.addAttribute("user", new UserRegistrationDTO());
 
         return "user_register_form";
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> saveNewUser(@ModelAttribute UserEntity userEntity){
+    public ResponseEntity<String> saveNewUser(@ModelAttribute UserRegistrationDTO user){
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Creating user");
 
-        userEntity.setRole(Role.USER);
-        String encodedUserPassword = passwordEncoder.encode(userEntity.getPassword());
-        userEntity.setPassword(encodedUserPassword);
+        String encodedUserPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedUserPassword);
 
         try{
-            userService.save(userEntity);
+            userService.save(UserRegistrationDTO.toEntity(user));
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .headers(httpHeaders)
@@ -67,19 +61,19 @@ public class UserController {
                     .status(HttpStatus.SEE_OTHER)
                     .headers(httpHeaders)
                     .location(URI.create("/user/auth"))
-                    .body("User with name " + userEntity.getName() + " already exists");
+                    .body("User with name " + user.getName() + " already exists");
         }
     }
 
     @GetMapping("/auth")
-    public String signingInUser(Model model){
-        model.addAttribute("user", new LogInUserDTO());
+    public String loggingUserForm(Model model){
+        model.addAttribute("user", new UserLogInDTO());
 
         return "user_signing_in_form";
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<String> authenticateUser(@ModelAttribute LogInUserDTO user){
+    public ResponseEntity<String> authenticateUser(@ModelAttribute UserLogInDTO user){
 
 
         Authentication authentication;
@@ -91,6 +85,7 @@ public class UserController {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
             System.out.println(authentication);
             System.out.println(authentication.getDetails());
+            System.out.println(authentication.getPrincipal());
         } catch (BadCredentialsException exception){
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
@@ -106,18 +101,18 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<ResponseUserDTO> getUserByIdOrName(@RequestParam(required = false) String name, @RequestParam(required = false) Long id) {
+    public ResponseEntity<UserResponseDTO> getUserByIdOrName(@RequestParam(required = false) String name, @RequestParam(required = false) Long id) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting user");
 
         if(name != null){
-            Optional<ResponseUserDTO> userOptional = userService.findByName(name);
+            Optional<UserResponseDTO> userOptional = userService.findByName(name).map(UserResponseDTO::toDTO);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
         }else if(id != null){
-            Optional<ResponseUserDTO> userOptional = userService.findById(id);
+            Optional<UserResponseDTO> userOptional = userService.findById(id).map(UserResponseDTO::toDTO);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
@@ -128,9 +123,9 @@ public class UserController {
 
     @GetMapping("/all")
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<ResponseUserDTO>> getAllUsers() {
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 
-        List<ResponseUserDTO> users = userService.findAll();
+        List<UserResponseDTO> users = userService.findAll();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting all users");
