@@ -1,6 +1,6 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.models.DTO.AdminDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.AdminDTO;
 import com.example.socialnetworkrestapi.models.entitys.AdminEntity;
 import com.example.socialnetworkrestapi.repositorys.AdminRepository;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,12 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.models.DTO.PostDTO;
-import com.example.socialnetworkrestapi.models.entitys.PostEntity;
+import com.example.socialnetworkrestapi.models.DTO.post.PostCreatingDTO;
+import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.PostRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,28 +19,37 @@ import java.util.Optional;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserService userService;
+    private final CategoryService categoryService;
 
     @Transactional
-    public void save(PostEntity postEntity){
-        postRepository.save(postEntity);
+    public void save(PostCreatingDTO post) throws ChangeSetPersister.NotFoundException {
+        UserEntity userEntity = userService.findById(post.getUserID()).orElse(null);
+        CategoryEntity categoryEntity = categoryService.findById(post.getCategoryID()).orElse(null);
+        if(userEntity != null && categoryEntity != null){
+            postRepository.save(PostCreatingDTO.toEntity(post, userEntity, categoryEntity));
+        }
+        else{
+            throw new ChangeSetPersister.NotFoundException();
+        }
     }
 
     @Transactional
-    public Optional<PostDTO> findById(Long id){
-        return postRepository.findById(id).map(PostDTO::toDTO);
+    public Optional<PostResponseDTO> findById(Long id){
+        return postRepository.findById(id).map(PostResponseDTO::toDTO);
     }
 
     @Transactional
-    public List<PostDTO> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(Long userId, String userName, Long categoryId, String categoryName){
-        List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName).forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+    public List<PostResponseDTO> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(Long userId, String userName, Long categoryId, String categoryName){
+        List<PostResponseDTO> postDTOS = new ArrayList<>();
+        postRepository.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName).forEach(postEntity -> postDTOS.add(PostResponseDTO.toDTO(postEntity)));
         return postDTOS;
     }
 
     @Transactional
-    public List<PostDTO> findAll(){
-        List<PostDTO> postDTOS = new ArrayList<>();
-        postRepository.findAll().forEach(postEntity -> postDTOS.add(PostDTO.toDTO(postEntity)));
+    public List<PostResponseDTO> findAll(){
+        List<PostResponseDTO> postDTOS = new ArrayList<>();
+        postRepository.findAll().forEach(postEntity -> postDTOS.add(PostResponseDTO.toDTO(postEntity)));
         return postDTOS;
     }
 

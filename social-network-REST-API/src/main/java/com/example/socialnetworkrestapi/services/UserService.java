@@ -1,6 +1,6 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.models.DTO.ResponseUserDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.UserRepository;
 import com.example.socialnetworkrestapi.security.UserDetailsImplementation;
@@ -38,19 +38,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Optional<ResponseUserDTO> findById(Long id){
-        return userRepository.findById(id).map(ResponseUserDTO::toDTO);
+    public Optional<UserEntity> findById(Long id){
+        return userRepository.findById(id);
     }
 
     @Transactional
-    public Optional<ResponseUserDTO> findByName(String name){
-        return userRepository.findByName(name).map(ResponseUserDTO::toDTO);
+    public Optional<UserEntity> findByName(String name){
+        return userRepository.findByName(name);
     }
 
     @Transactional
-    public List<ResponseUserDTO> findAll(){
-        List<ResponseUserDTO> userDTOS = new ArrayList<>();
-        userRepository.findAll().forEach(userEntity -> userDTOS.add(ResponseUserDTO.toDTO(userEntity)));
+    public List<UserResponseDTO> findAll(){
+        List<UserResponseDTO> userDTOS = new ArrayList<>();
+        userRepository.findAll().forEach(userEntity -> userDTOS.add(UserResponseDTO.toDTO(userEntity)));
         return userDTOS;
     }
 

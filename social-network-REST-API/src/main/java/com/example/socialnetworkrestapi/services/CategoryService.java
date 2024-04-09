@@ -1,6 +1,6 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.models.DTO.CategoryDTO;
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
 import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.repositorys.CategoryRepository;
 import lombok.AllArgsConstructor;
@@ -23,19 +23,19 @@ public class CategoryService {
     }
 
     @Transactional
-    public Optional<CategoryDTO> findById(Long id){
-        return categoryRepository.findById(id).map(CategoryDTO::toDTO);
+    public Optional<CategoryEntity> findById(Long id){
+        return categoryRepository.findById(id);
     }
 
     @Transactional
-    public Optional<CategoryDTO> findByName(String categoryName){
-        return categoryRepository.findByName(categoryName).map(CategoryDTO::toDTO);
+    public Optional<CategoryEntity> findByName(String categoryName){
+        return categoryRepository.findByName(categoryName);
     }
 
     @Transactional
-    public List<CategoryDTO> findAll(){
-        List<CategoryDTO> categoryDTOS = new ArrayList<>();
-        categoryRepository.findAll().forEach(categoryEntity -> categoryDTOS.add(CategoryDTO.toDTO(categoryEntity)));
+    public List<CategoryResponseDTO> findAll(){
+        List<CategoryResponseDTO> categoryDTOS = new ArrayList<>();
+        categoryRepository.findAll().forEach(categoryEntity -> categoryDTOS.add(CategoryResponseDTO.toDTO(categoryEntity)));
         return categoryDTOS;
     }
 
