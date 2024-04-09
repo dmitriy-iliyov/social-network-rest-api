@@ -1,7 +1,6 @@
 package com.example.socialnetworkrestapi.security;
 
-import com.example.socialnetworkrestapi.models.entitys.PostEntity;
-import com.example.socialnetworkrestapi.models.entitys.Role;
+import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

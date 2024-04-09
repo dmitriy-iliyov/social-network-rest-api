@@ -18,7 +18,7 @@ public class JwtCore {
     private int lifetime;
 
     public String generateToken(Authentication authentication){
-        UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication;
+        UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
