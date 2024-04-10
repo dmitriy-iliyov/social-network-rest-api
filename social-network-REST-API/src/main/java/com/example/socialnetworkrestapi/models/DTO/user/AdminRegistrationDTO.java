@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserRegistrationDTO {
+public class AdminRegistrationDTO {
 
     private String name;
     private String password;
-    private String email;
 
-    public static UserEntity toEntity(UserRegistrationDTO userDTO){
+    public static UserEntity toEntity(AdminRegistrationDTO adminDTO){
         return UserEntity.builder()
-                .name(userDTO.name)
-                .password(userDTO.password)
-                .email(userDTO.email)
-                .role(Role.USER)
+                .name(adminDTO.name)
+                .password(adminDTO.password)
+                .role(Role.ADMIN)
                 .build();
     }
 }

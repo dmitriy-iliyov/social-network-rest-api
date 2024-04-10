@@ -25,6 +25,7 @@ public class UserResponseDTO {
     public static UserResponseDTO toDTO(UserEntity userEntity){
         List<PostResponseDTO> listOfPostDTO = new ArrayList<>();
         userEntity.getPosts().forEach(postEntity -> listOfPostDTO.add(PostResponseDTO.toDTO(postEntity)));
+
         return new UserResponseDTO(
                 userEntity.getId(), userEntity.getName(), userEntity.getPassword(),
                 userEntity.getEmail(), userEntity.getCreateDate(), listOfPostDTO

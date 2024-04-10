@@ -3,6 +3,7 @@ package com.example.socialnetworkrestapi.models.entitys;
 import com.example.socialnetworkrestapi.models.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import static jakarta.persistence.GenerationType.SEQUENCE;
 @Table
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity(name="users")
 public class UserEntity {
 
@@ -41,11 +43,4 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<PostEntity> posts;
-
-    public UserEntity(String name, String password, String email) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.role = Role.USER;
-    }
 }
