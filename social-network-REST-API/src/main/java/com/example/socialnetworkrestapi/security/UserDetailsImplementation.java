@@ -1,5 +1,6 @@
 package com.example.socialnetworkrestapi.security;
 
+import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
 import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.AllArgsConstructor;
@@ -9,8 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,9 +25,13 @@ public class UserDetailsImplementation implements UserDetails {
     private String email;
     private Instant createDate;
     private Role role;
-    private int postCount;
+    private List<PostResponseDTO> posts;
 
     public static UserDetailsImplementation build(UserEntity userEntity){
+
+        List<PostResponseDTO> postResponseDTOS = new ArrayList<>();
+        userEntity.getPosts().forEach(postEntity -> postResponseDTOS.add(PostResponseDTO.toDTO(postEntity)));
+
         return new UserDetailsImplementation(
                 userEntity.getId(),
                 userEntity.getName(),
@@ -32,7 +39,8 @@ public class UserDetailsImplementation implements UserDetails {
                 userEntity.getEmail(),
                 userEntity.getCreateDate(),
                 userEntity.getRole(),
-                userEntity.getPosts().size());
+                postResponseDTOS
+        );
     }
 
     @Override
