@@ -24,7 +24,7 @@ public class PostService {
 
     @Transactional
     public void save(PostCreatingDTO post) throws ChangeSetPersister.NotFoundException {
-        UserEntity userEntity = userService.findById(post.getUserID()).orElse(null);
+        UserEntity userEntity = userService.findUserEntityById(post.getUserID()).orElse(null);
         CategoryEntity categoryEntity = categoryService.findById(post.getCategoryID()).orElse(null);
         if(userEntity != null && categoryEntity != null){
             postRepository.save(PostCreatingDTO.toEntity(post, userEntity, categoryEntity));

@@ -1,6 +1,8 @@
 package com.example.socialnetworkrestapi.services;
 
+import com.example.socialnetworkrestapi.models.DTO.user.AdminResponseDTO;
 import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
+import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.UserRepository;
 import com.example.socialnetworkrestapi.security.UserDetailsImplementation;
@@ -8,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,8 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,20 +43,42 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Optional<UserEntity> findById(Long id){
+    public Optional<UserEntity> findUserEntityById(Long id){
         return userRepository.findById(id);
     }
 
     @Transactional
-    public Optional<UserEntity> findByName(String name){
+    public Optional<UserEntity> findUserEntityByName(String name){
         return userRepository.findByName(name);
     }
 
     @Transactional
-    public List<UserResponseDTO> findAll(){
-        List<UserResponseDTO> userDTOS = new ArrayList<>();
-        userRepository.findAll().forEach(userEntity -> userDTOS.add(UserResponseDTO.toDTO(userEntity)));
-        return userDTOS;
+    public Optional<UserResponseDTO> findUserDtoById(Long id){
+        return userRepository.findById(id).map(UserResponseDTO::toDTO);
+    }
+
+    @Transactional
+    public Optional<UserResponseDTO> findUserDtoByName(String name){
+        return userRepository.findByName(name).map(UserResponseDTO::toDTO);
+    }
+
+    @Transactional
+    public List<UserResponseDTO> findAllUsers(){
+        List<UserResponseDTO> users = new ArrayList<>();
+        userRepository.findAllByRole(Role.USER).forEach(userEntity -> users.add(UserResponseDTO.toDTO(userEntity)));
+        return  users;
+    }
+
+    @Transactional
+    public List<AdminResponseDTO> findAllAdmins(){
+        List<AdminResponseDTO> admins = new ArrayList<>();
+        userRepository.findAllByRole(Role.ADMIN).forEach(userEntity -> admins.add(AdminResponseDTO.toDTO(userEntity)));
+        return admins;
+    }
+
+    @Transactional
+    public  void deleteByNameAndPassword(String name, String password){
+        userRepository.deleteByNameAndPassword(name, passwordEncoder.encode(password));
     }
 
     @Transactional
