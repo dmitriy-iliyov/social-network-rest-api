@@ -75,17 +75,13 @@ public class UserController {
     @PostMapping("/auth")
     public ResponseEntity<String> authenticateUser(@ModelAttribute UserLogInDTO user){
 
-
         Authentication authentication;
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Authenticate user");
-
         try{
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
-            System.out.println(authentication);
-            System.out.println(authentication.getDetails());
-            System.out.println(authentication.getPrincipal());
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
         } catch (BadCredentialsException exception){
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
@@ -94,6 +90,7 @@ public class UserController {
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtCore.generateToken(authentication);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .headers(httpHeaders)
@@ -101,18 +98,19 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<UserResponseDTO> getUserByIdOrName(@RequestParam(required = false) String name, @RequestParam(required = false) Long id) {
+    public ResponseEntity<UserResponseDTO> getUserByIdOrName(@RequestParam(required = false) String name,
+                                                             @RequestParam(required = false) Long id) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting user");
 
         if(name != null){
-            Optional<UserResponseDTO> userOptional = userService.findByName(name).map(UserResponseDTO::toDTO);
+            Optional<UserResponseDTO> userOptional = userService.findUserDtoByName(name);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
         }else if(id != null){
-            Optional<UserResponseDTO> userOptional = userService.findById(id).map(UserResponseDTO::toDTO);
+            Optional<UserResponseDTO> userOptional = userService.findUserDtoById(id);
             return userOptional
                     .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
                     .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
@@ -122,10 +120,9 @@ public class UserController {
     }
 
     @GetMapping("/all")
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 
-        List<UserResponseDTO> users = userService.findAll();
+        List<UserResponseDTO> users = userService.findAllUsers();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting all users");

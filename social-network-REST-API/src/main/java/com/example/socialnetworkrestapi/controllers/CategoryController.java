@@ -1,6 +1,7 @@
 package com.example.socialnetworkrestapi.controllers;
 
 
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryCreatingDTO;
 import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
 import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.services.CategoryService;
@@ -25,18 +26,19 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String addNewCategoryForm(Model model){
-        model.addAttribute("category", new CategoryEntity());
+        model.addAttribute("category", new CategoryCreatingDTO());
 
         return "category_register_form";
     }
 
     @PostMapping("/new")
-    public ResponseEntity<String> saveNewCategory(@ModelAttribute CategoryEntity categoryEntity){
+    public ResponseEntity<String> saveNewCategory(@ModelAttribute CategoryCreatingDTO category){
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Creating category");
 
         try {
-            categoryService.save(categoryEntity);
+            categoryService.save(CategoryCreatingDTO.toEntity(category));
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .headers(httpHeaders)
@@ -45,7 +47,7 @@ public class CategoryController {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .headers(httpHeaders)
-                    .body("Category with this name "+ categoryEntity.getName() +" is exist");
+                    .body("Category with this name "+ category.getName() +" is exist");
         }
     }
 
@@ -75,7 +77,9 @@ public class CategoryController {
 
     @GetMapping("/all")
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
+
         List<CategoryResponseDTO> categories = categoryService.findAll();
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting all category");
 
@@ -86,8 +90,10 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id){
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Deleting category");
+
         try{
             categoryService.deleteById(id);
             return ResponseEntity

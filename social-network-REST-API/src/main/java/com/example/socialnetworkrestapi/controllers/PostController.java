@@ -38,25 +38,29 @@ public class PostController {
 
     @PostMapping("/new")
     public ResponseEntity<String> saveNewPost(@ModelAttribute PostCreatingDTO post) {
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Creating post");
-         try {
+
+        try {
              postService.save(post);
              return ResponseEntity
                      .status(HttpStatus.CREATED)
                      .headers(httpHeaders)
                      .body("Post successfully created");
-         } catch (ChangeSetPersister.NotFoundException e){
+        } catch (ChangeSetPersister.NotFoundException e){
              return ResponseEntity
                      .status(HttpStatus.NOT_FOUND)
                      .headers(httpHeaders)
                      .body("User or category doesn't exist");
-         }
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<PostResponseDTO> getPostById(@PathVariable Long id){
+
         Optional<PostResponseDTO> postOptional = postService.findById(id);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting post by id");
 
@@ -71,10 +75,11 @@ public class PostController {
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) String categoryName){
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-info", "Getting all post by user id or name");
 
         List<PostResponseDTO> posts = postService.findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(userId, userName, categoryId, categoryName);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-info", "Getting all post by user id or name");
 
         return posts.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null)
@@ -84,7 +89,9 @@ public class PostController {
 
     @GetMapping("/all")
     public ResponseEntity<List<PostResponseDTO>> getAllPosts(){
+
         List<PostResponseDTO> posts = postService.findAll();
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Getting all posts");
 
@@ -95,8 +102,10 @@ public class PostController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-info", "Deleting post by id");
+
         try {
             postService.deleteById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
