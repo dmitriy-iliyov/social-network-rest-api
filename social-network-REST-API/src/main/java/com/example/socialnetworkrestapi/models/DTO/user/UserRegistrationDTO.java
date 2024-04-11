@@ -5,6 +5,8 @@ import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 public class UserRegistrationDTO {
@@ -19,6 +21,7 @@ public class UserRegistrationDTO {
                 .password(userDTO.password)
                 .email(userDTO.email)
                 .role(Role.USER)
+                .createDate(Instant.now())
                 .build();
     }
 }

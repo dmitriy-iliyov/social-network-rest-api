@@ -35,12 +35,12 @@ public class UserEntity {
     private String email;
 
     @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
-    private Instant createDate = Instant.now();
+    private Instant createDate;
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<PostEntity> posts;
 }

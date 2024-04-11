@@ -5,11 +5,13 @@ import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
 import com.example.socialnetworkrestapi.models.DTO.user.UserRegistrationDTO;
 import com.example.socialnetworkrestapi.security.JwtCore;
 import com.example.socialnetworkrestapi.services.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,21 +48,20 @@ public class UserController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Creating user");
-
-        String encodedUserPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedUserPassword);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         try{
             userService.save(UserRegistrationDTO.toEntity(user));
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .headers(httpHeaders)
-                    .body("User successfully created");
-        }catch (DataIntegrityViolationException exception){
+            httpHeaders.setLocation(URI.create("/user/auth"));
             return ResponseEntity
                     .status(HttpStatus.SEE_OTHER)
                     .headers(httpHeaders)
-                    .location(URI.create("/user/auth"))
+                    .body("User successfully created, redirecting...");
+        }catch (DataIntegrityViolationException e){
+            System.out.println("EXCEPTION  " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .headers(httpHeaders)
                     .body("User with name " + user.getName() + " already exists");
         }
     }
@@ -73,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<String> authenticateUser(@ModelAttribute UserLogInDTO user){
+    public ResponseEntity<String> authenticateUser(@RequestBody UserLogInDTO user){
 
         Authentication authentication;
 
@@ -82,7 +83,8 @@ public class UserController {
         try{
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
-        } catch (BadCredentialsException exception){
+        } catch (BadCredentialsException e){
+            System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .headers(httpHeaders)
@@ -98,6 +100,7 @@ public class UserController {
     }
 
     @GetMapping("/get")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<UserResponseDTO> getUserByIdOrName(@RequestParam(required = false) String name,
                                                              @RequestParam(required = false) Long id) {
 
@@ -120,6 +123,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 
         List<UserResponseDTO> users = userService.findAllUsers();
@@ -132,8 +136,33 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(users);
     }
 
+    @GetMapping("/get-token")
+    @Secured("ROLE_USER")
+    public ResponseEntity<String> getToken(HttpServletRequest request){
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-Info", "Getting token");
+
+        String jwt = jwtCore.getTokenFromHttpHeader(request.getHeader("Authorization"));
+        String userName = jwtCore.getNameFromJwt(jwt);
+        Long id = jwtCore.getIdFromJwt(jwt);
+
+        if(userName == null){
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .headers(httpHeaders)
+                    .body(null);
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .headers(httpHeaders)
+                .body(userName);
+    }
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public ResponseEntity<String> deleteUser(@PathVariable Long id, HttpServletRequest request) {
+
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Deleting user by id");
@@ -145,6 +174,7 @@ public class UserController {
                     .headers(httpHeaders)
                     .body("User with ID " + id + " has been successfully deleted");
         } catch (Exception e) {
+            System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)

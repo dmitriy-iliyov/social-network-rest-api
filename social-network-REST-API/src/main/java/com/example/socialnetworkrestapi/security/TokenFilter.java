@@ -34,21 +34,24 @@ public class TokenFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken auth;
         try{
             String headerAuth = request.getHeader("Authorization");
-            if(headerAuth != null && headerAuth.startsWith("Bearer "))
+            if(headerAuth != null && headerAuth.startsWith("Bearer ")){
                 jwt = headerAuth.substring(7);
+            }
             if(jwt != null){
               try{
                   userName = jwtCore.getNameFromJwt(jwt);
-              } catch (ExpiredJwtException exception){
-                  System.out.println(exception.getMessage());
+              } catch (ExpiredJwtException e){
+                  System.out.println("EXCEPTION  " + e.getMessage());
               }
               if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
                   userDetails = userDetailsService.loadUserByUsername(userName);
-                  auth = new UsernamePasswordAuthenticationToken(userDetails, null);
+                  auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                   SecurityContextHolder.getContext().setAuthentication(auth);
               }
             }
-        } catch (Exception e){}
+        } catch (Exception e){
+            System.out.println("EXCEPTION  " + e.getMessage());
+        }
         filterChain.doFilter(request, response);
     }
 }

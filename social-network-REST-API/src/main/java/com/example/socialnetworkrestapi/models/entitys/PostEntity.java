@@ -26,7 +26,7 @@ public class PostEntity {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="user_id", nullable = false)
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -27,7 +28,7 @@ import org.springframework.web.cors.CorsConfiguration;
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserService userService;
@@ -69,8 +70,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/user/new", "/user/auth").permitAll()
-                        .requestMatchers("/user/**").authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/home/**","/user/new", "/user/auth", "/admin/**").permitAll()
+                        .requestMatchers("/user/**","/post/**","/category/**").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

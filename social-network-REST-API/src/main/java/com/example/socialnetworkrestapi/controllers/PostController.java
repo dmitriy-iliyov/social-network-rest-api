@@ -14,6 +14,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ public class PostController {
 
 
     @GetMapping("/new")
+    @Secured("ROLE_USER")
     public String addNewPostForm(Model model) {
         model.addAttribute("post", new PostCreatingDTO());
 
@@ -37,6 +39,7 @@ public class PostController {
     }
 
     @PostMapping("/new")
+    @Secured("ROLE_USER")
     public ResponseEntity<String> saveNewPost(@ModelAttribute PostCreatingDTO post) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -49,7 +52,8 @@ public class PostController {
                      .headers(httpHeaders)
                      .body("Post successfully created");
         } catch (ChangeSetPersister.NotFoundException e){
-             return ResponseEntity
+            System.out.println("EXCEPTION  " + e.getMessage());
+            return ResponseEntity
                      .status(HttpStatus.NOT_FOUND)
                      .headers(httpHeaders)
                      .body("User or category doesn't exist");
@@ -57,6 +61,7 @@ public class PostController {
     }
 
     @GetMapping("/get/{id}")
+    @Secured("ROLE_USER")
     public ResponseEntity<PostResponseDTO> getPostById(@PathVariable Long id){
 
         Optional<PostResponseDTO> postOptional = postService.findById(id);
@@ -70,6 +75,7 @@ public class PostController {
     }
 
     @GetMapping("/get")
+    @Secured("ROLE_USER")
     public ResponseEntity<List<PostResponseDTO>> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String userName,
@@ -88,6 +94,7 @@ public class PostController {
     }
 
     @GetMapping("/all")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<PostResponseDTO>> getAllPosts(){
 
         List<PostResponseDTO> posts = postService.findAll();
@@ -101,6 +108,7 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -112,6 +120,7 @@ public class PostController {
                     .headers(httpHeaders)
                     .body("Post with ID " + id + " has been successfully deleted");
         } catch (Exception e) {
+            System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)

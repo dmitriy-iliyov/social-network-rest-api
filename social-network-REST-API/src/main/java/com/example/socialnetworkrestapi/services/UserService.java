@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -78,7 +77,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public  void deleteByNameAndPassword(String name, String password){
-        userRepository.deleteByNameAndPassword(name, passwordEncoder.encode(password));
+        userRepository.deleteByNameAndPassword(name, password);
     }
 
     @Transactional

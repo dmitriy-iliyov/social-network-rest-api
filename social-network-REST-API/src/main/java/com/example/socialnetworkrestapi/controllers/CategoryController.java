@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/new")
+    @Secured("ROLE_ADMIN")
     public String addNewCategoryForm(Model model){
         model.addAttribute("category", new CategoryCreatingDTO());
 
@@ -32,6 +34,7 @@ public class CategoryController {
     }
 
     @PostMapping("/new")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> saveNewCategory(@ModelAttribute CategoryCreatingDTO category){
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -43,7 +46,8 @@ public class CategoryController {
                     .status(HttpStatus.CREATED)
                     .headers(httpHeaders)
                     .body("Category successfully created");
-        }catch (DataIntegrityViolationException exception){
+        }catch (DataIntegrityViolationException e){
+            System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .headers(httpHeaders)
@@ -52,6 +56,7 @@ public class CategoryController {
     }
 
     @GetMapping("/get")
+    @Secured("ROLE_USER")
     public ResponseEntity<CategoryResponseDTO> getCategoryByIdOrName(@RequestParam(required = false) Long id,
                                                                      @RequestParam(required = false) String name){
 
@@ -76,6 +81,7 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
 
         List<CategoryResponseDTO> categories = categoryService.findAll();
@@ -89,6 +95,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id){
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -101,6 +108,7 @@ public class CategoryController {
                     .headers(httpHeaders)
                     .body("Category with ID " + id + " has been successfully deleted");
         }catch (Exception e){
+            System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)
