@@ -2,11 +2,13 @@ package com.example.socialnetworkrestapi.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtCore {
@@ -19,9 +21,18 @@ public class JwtCore {
 
     public String generateToken(Authentication authentication) {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
+        Claims claims = Jwts.claims().setSubject(userDetails.getUsername());
+        claims.put("id", userDetails.getId());
+        claims.put("roles",
+                userDetails
+                        .getAuthorities()
+                        .stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList())
+        );
 
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + lifetime))
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())
@@ -42,16 +53,16 @@ public class JwtCore {
     }
 
     public Long getIdFromJwt(String token){
-        Long id = null;
         try {
             Claims userData = Jwts.parser()
                     .setSigningKey(secret.getBytes())
-                    .parseClaimsJwt(token)
+                    .parseClaimsJws(token)
                     .getBody();
+            return userData.get("id", Long.class);
         } catch (Exception e){
             System.out.println("EXCEPTION  " + e.getMessage());
         }
-        return id;
+        return null;
     }
 
     public String getNameFromJwt(String token) {
