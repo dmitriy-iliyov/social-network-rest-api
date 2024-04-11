@@ -23,7 +23,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -74,12 +76,13 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<String> authenticateUser(@RequestBody UserLogInDTO user){
+    public ResponseEntity<String> authenticateUser(@ModelAttribute UserLogInDTO user){
 
         Authentication authentication;
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Authorization", "Authenticate user");
+
         try{
             authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
@@ -136,33 +139,12 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(users);
     }
 
-    @GetMapping("/get-token")
-    @Secured("ROLE_USER")
-    public ResponseEntity<String> getToken(HttpServletRequest request){
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("X-Info", "Getting token");
+    @DeleteMapping("/delete")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
 
         String jwt = jwtCore.getTokenFromHttpHeader(request.getHeader("Authorization"));
-        String userName = jwtCore.getNameFromJwt(jwt);
         Long id = jwtCore.getIdFromJwt(jwt);
-
-        if(userName == null){
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .headers(httpHeaders)
-                    .body(null);
-        }
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .headers(httpHeaders)
-                .body(userName);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<String> deleteUser(@PathVariable Long id, HttpServletRequest request) {
-
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Deleting user by id");
