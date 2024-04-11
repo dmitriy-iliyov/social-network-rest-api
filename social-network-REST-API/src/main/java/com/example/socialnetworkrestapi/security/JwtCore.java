@@ -5,11 +5,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
-import java.util.Base64;
-import java.util.Date;
 
+import java.util.Date;
 
 @Component
 public class JwtCore {
@@ -23,23 +20,45 @@ public class JwtCore {
     public String generateToken(Authentication authentication) {
         UserDetailsImplementation userDetails = (UserDetailsImplementation) authentication.getPrincipal();
 
-        byte[] apiKeySecretBytes = Base64.getDecoder().decode(secret);
-        Key signingKey = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
-
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new  Date().getTime() + lifetime))
-                .signWith(SignatureAlgorithm.HS256, signingKey)
+                .setExpiration(new Date(new Date().getTime() + lifetime))
+                .signWith(SignatureAlgorithm.HS256, secret.getBytes())
                 .compact();
+    }
+
+    public String getTokenFromHttpHeader(String header){
+        String jwt = null;
+        try{
+            if(header != null && header.startsWith("Bearer "))
+                jwt = header.substring(7);
+            if (jwt != null)
+                return jwt;
+        } catch (Exception e){
+            System.out.println("EXCEPTION  " + e.getMessage());
+        }
+        return null;
+    }
+
+    public Long getIdFromJwt(String token){
+        Long id = null;
+        try {
+            Claims userData = Jwts.parser()
+                    .setSigningKey(secret.getBytes())
+                    .parseClaimsJwt(token)
+                    .getBody();
+        } catch (Exception e){
+            System.out.println("EXCEPTION  " + e.getMessage());
+        }
+        return id;
     }
 
     public String getNameFromJwt(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJwt(token)
+                .setSigningKey(secret.getBytes())
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 }
-
