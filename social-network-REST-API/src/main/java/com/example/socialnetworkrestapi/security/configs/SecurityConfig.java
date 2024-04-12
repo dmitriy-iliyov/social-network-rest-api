@@ -70,8 +70,8 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/home/**","/user/new", "/user/auth", "/admin/**").permitAll()
-                        .requestMatchers("/user/**","/post/**","/category/**").authenticated())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/home/**", "/user/auth", "/admin/**").permitAll()
+                        .requestMatchers("/user/**", "/post/**", "/category/**").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

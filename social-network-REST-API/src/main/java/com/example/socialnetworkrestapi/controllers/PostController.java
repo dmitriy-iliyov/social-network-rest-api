@@ -15,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +26,29 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/post")
+@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
 public class PostController {
 
     private final PostService postService;
 
 
     @GetMapping("/new")
-    @Secured("ROLE_USER")
+    @PreAuthorize("hasAuthority('USER')")
     public String addNewPostForm(Model model) {
         model.addAttribute("post", new PostCreatingDTO());
 
         return "post_register_form";
     }
 
+    @GetMapping("/test")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @ResponseBody
+    public String test(){
+        return "success";
+    }
+
     @PostMapping("/new")
-    @Secured("ROLE_USER")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> saveNewPost(@ModelAttribute PostCreatingDTO post) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -61,7 +70,6 @@ public class PostController {
     }
 
     @GetMapping("/get/{id}")
-    @Secured("ROLE_USER")
     public ResponseEntity<PostResponseDTO> getPostById(@PathVariable Long id){
 
         Optional<PostResponseDTO> postOptional = postService.findById(id);
@@ -75,7 +83,6 @@ public class PostController {
     }
 
     @GetMapping("/get")
-    @Secured("ROLE_USER")
     public ResponseEntity<List<PostResponseDTO>> findAllByUserIdOrUserNameOrCategoryIdOrCategoryName(
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) String userName,
@@ -94,7 +101,7 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<PostResponseDTO>> getAllPosts(){
 
         List<PostResponseDTO> posts = postService.findAll();
@@ -108,7 +115,6 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
 
         HttpHeaders httpHeaders = new HttpHeaders();

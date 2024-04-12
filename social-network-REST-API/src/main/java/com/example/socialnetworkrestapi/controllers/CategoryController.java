@@ -3,14 +3,13 @@ package com.example.socialnetworkrestapi.controllers;
 
 import com.example.socialnetworkrestapi.models.DTO.category.CategoryCreatingDTO;
 import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
-import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,12 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/category")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
     @GetMapping("/new")
-    @Secured("ROLE_ADMIN")
     public String addNewCategoryForm(Model model){
         model.addAttribute("category", new CategoryCreatingDTO());
 
@@ -34,7 +33,6 @@ public class CategoryController {
     }
 
     @PostMapping("/new")
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> saveNewCategory(@ModelAttribute CategoryCreatingDTO category){
 
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -56,7 +54,7 @@ public class CategoryController {
     }
 
     @GetMapping("/get")
-    @Secured("ROLE_USER")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<CategoryResponseDTO> getCategoryByIdOrName(@RequestParam(required = false) Long id,
                                                                      @RequestParam(required = false) String name){
 
@@ -81,7 +79,6 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<List<CategoryResponseDTO>> getAllCategories(){
 
         List<CategoryResponseDTO> categories = categoryService.findAll();
@@ -95,7 +92,6 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete/{id}")
-    @Secured("ROLE_ADMIN")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id){
 
         HttpHeaders httpHeaders = new HttpHeaders();

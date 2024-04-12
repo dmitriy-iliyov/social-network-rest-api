@@ -2,6 +2,7 @@ package com.example.socialnetworkrestapi.models.DTO.user;
 
 
 import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
+import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class UserResponseDTO {
 
     private Long id;
     private String name;
+    private Role role;
     private String password;
     private String email;
     private Instant createDate;
@@ -27,7 +29,7 @@ public class UserResponseDTO {
         userEntity.getPosts().forEach(postEntity -> listOfPostDTO.add(PostResponseDTO.toDTO(postEntity)));
 
         return new UserResponseDTO(
-                userEntity.getId(), userEntity.getName(), userEntity.getPassword(),
+                userEntity.getId(), userEntity.getName(), userEntity.getRole(), userEntity.getPassword(),
                 userEntity.getEmail(), userEntity.getCreateDate(), listOfPostDTO
         );
     }

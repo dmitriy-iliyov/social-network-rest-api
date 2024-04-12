@@ -9,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,10 +57,10 @@ public class AdminController {
     }
 
     @GetMapping("/get/{id}")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<AdminResponseDTO> getAdminById(@PathVariable Long id) {
 
-        Optional<AdminResponseDTO> adminOptional = userService.findUserEntityById(id).map(AdminResponseDTO::toDTO);
+        Optional<AdminResponseDTO> adminOptional = userService.findEntityById(id).map(AdminResponseDTO::toDTO);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting admin by id");
@@ -71,7 +71,7 @@ public class AdminController {
     }
 
     @GetMapping("/all")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Iterable<AdminResponseDTO>> getAllAdmins() {
 
         List<AdminResponseDTO> admins = userService.findAllAdmins();
@@ -85,7 +85,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> deleteAdmin(@RequestBody UserLogInDTO admin ) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
