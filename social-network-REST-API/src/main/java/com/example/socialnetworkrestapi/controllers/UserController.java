@@ -1,8 +1,11 @@
 package com.example.socialnetworkrestapi.controllers;
 
+import com.example.socialnetworkrestapi.models.DTO.user.AdminResponseDTO;
 import com.example.socialnetworkrestapi.models.DTO.user.UserLogInDTO;
 import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
 import com.example.socialnetworkrestapi.models.DTO.user.UserRegistrationDTO;
+import com.example.socialnetworkrestapi.models.Role;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.security.JwtCore;
 import com.example.socialnetworkrestapi.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,9 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -102,31 +103,88 @@ public class UserController {
                 .body(jwt);
     }
 
+    @GetMapping("/edit/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public String editUserForm(@PathVariable Long id, Model model){
+        UserResponseDTO userResponseDTO = userService.findDtoById(id).orElse(null);
+        if(userResponseDTO != null){
+            model.addAttribute("user", userResponseDTO);
+            return "user_edit_form";
+        }
+        else{
+            System.out.println("EXCEPTION  User not found in database!");
+            return "redirect:/user/auth";
+        }
+    }
+
+    @PostMapping("/edit")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<String>  saveEditedUser(@ModelAttribute UserResponseDTO userResponseDTO){
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-info", "Editing user");
+
+        try {
+            userService.update(userResponseDTO, passwordEncoder);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .headers(httpHeaders)
+                    .body("Successfully edited");
+        } catch (DataIntegrityViolationException e){
+            System.out.println("EXCEPTION  " + e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .headers(httpHeaders)
+                    .body("failed(");
+        }
+    }
+
     @GetMapping("/get")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ResponseEntity<UserResponseDTO> getUserByIdOrName(@RequestParam(required = false) String name,
-                                                             @RequestParam(required = false) Long id) {
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    public ResponseEntity<?> getUserByIdOrName(HttpServletRequest request) {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Getting user");
 
-        if(name != null){
-            Optional<UserResponseDTO> userOptional = userService.findUserDtoByName(name);
-            return userOptional
-                    .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
-        }else if(id != null){
-            Optional<UserResponseDTO> userOptional = userService.findUserDtoById(id);
-            return userOptional
-                    .map(userDTO -> ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(userDTO))
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).headers(httpHeaders).body(null));
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).headers(httpHeaders).body(null);
+        String jwt = jwtCore.getTokenFromHttpHeader(request.getHeader("Authorization"));
+        String name = jwtCore.getNameFromJwt(jwt);
+        Long id = jwtCore.getIdFromJwt(jwt);
+
+        try {
+            if(name != null)
+                return getResponseEntity(httpHeaders, userService.findEntityByName(name));
+            if(id != null)
+                return getResponseEntity(httpHeaders, userService.findEntityById(id));
+        } catch (NullPointerException e){
+            System.out.println("EXCEPTION  " + e.getMessage());
         }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .headers(httpHeaders)
+                .body(null);
+    }
+
+    private ResponseEntity<?> getResponseEntity(HttpHeaders httpHeaders, Optional<UserEntity> userEntity) {
+        UserResponseDTO userResponseDTO = userEntity.map(UserResponseDTO::toDTO).orElse(null);
+        if(userResponseDTO != null){
+            if(userResponseDTO.getRole() == Role.ADMIN)
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .headers(httpHeaders)
+                        .body(userEntity.map(AdminResponseDTO::toDTO));
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .headers(httpHeaders)
+                    .body(userResponseDTO);
+        }
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .headers(httpHeaders)
+                .body(null);
     }
 
     @GetMapping("/all")
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
 
         List<UserResponseDTO> users = userService.findAllUsers();
@@ -140,7 +198,7 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public ResponseEntity<String> deleteUser(HttpServletRequest request) {
 
         String jwt = jwtCore.getTokenFromHttpHeader(request.getHeader("Authorization"));
