@@ -37,27 +37,27 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean existingUserEntityByName(String name){
+    public boolean existingByName(String name){
         return userRepository.existsUserEntityByName(name);
     }
 
     @Transactional
-    public Optional<UserEntity> findUserEntityById(Long id){
+    public Optional<UserEntity> findEntityById(Long id){
         return userRepository.findById(id);
     }
 
     @Transactional
-    public Optional<UserEntity> findUserEntityByName(String name){
+    public Optional<UserEntity> findEntityByName(String name){
         return userRepository.findByName(name);
     }
 
     @Transactional
-    public Optional<UserResponseDTO> findUserDtoById(Long id){
+    public Optional<UserResponseDTO> findDtoById(Long id){
         return userRepository.findById(id).map(UserResponseDTO::toDTO);
     }
 
     @Transactional
-    public Optional<UserResponseDTO> findUserDtoByName(String name){
+    public Optional<UserResponseDTO> findDtoByName(String name){
         return userRepository.findByName(name).map(UserResponseDTO::toDTO);
     }
 
@@ -73,6 +73,18 @@ public class UserService implements UserDetailsService {
         List<AdminResponseDTO> admins = new ArrayList<>();
         userRepository.findAllByRole(Role.ADMIN).forEach(userEntity -> admins.add(AdminResponseDTO.toDTO(userEntity)));
         return admins;
+    }
+
+    @Transactional
+    public void update(UserResponseDTO userResponseDTO, PasswordEncoder passwordEncoder){
+        userRepository.findById(userResponseDTO.getId())
+                .ifPresent(userEntity -> {
+                    userEntity.setName(userResponseDTO.getName());
+                    if (!userResponseDTO.getPassword().isEmpty())
+                        userEntity.setPassword(passwordEncoder.encode(userResponseDTO.getPassword()));
+                    userEntity.setEmail(userResponseDTO.getEmail());
+                    userRepository.save(userEntity);
+                });
     }
 
     @Transactional
