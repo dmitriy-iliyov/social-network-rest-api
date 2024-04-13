@@ -69,14 +69,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/auth")
+    @GetMapping("/login")
     public String loggingUserForm(Model model){
         model.addAttribute("user", new UserLogInDTO());
 
         return "user_signing_in_form";
     }
 
-    @PostMapping("/auth")
+    @PostMapping("/login")
     public ResponseEntity<String> authenticateUser(@ModelAttribute UserLogInDTO user){
 
         Authentication authentication;

@@ -6,7 +6,7 @@
 </head>
 <body>
 <h2>Login Form</h2>
-<form th:method="POST" th:action="@{/user/auth}" th:object="${user}">
+<form th:method="POST" th:action="@{/user/login}" th:object="${user}">
     <label>Name:</label>
     <input type="text" field="*{name}" name="name"/><br/>
 
