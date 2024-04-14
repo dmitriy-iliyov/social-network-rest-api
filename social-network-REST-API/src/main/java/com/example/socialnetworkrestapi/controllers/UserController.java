@@ -55,7 +55,7 @@ public class UserController {
 
         try{
             userService.save(UserRegistrationDTO.toEntity(user));
-            httpHeaders.setLocation(URI.create("/user/auth"));
+            httpHeaders.setLocation(URI.create("/user/login"));
             return ResponseEntity
                     .status(HttpStatus.SEE_OTHER)
                     .headers(httpHeaders)
@@ -89,10 +89,12 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword()));
         } catch (BadCredentialsException e){
             System.out.println("EXCEPTION  " + e.getMessage());
+            httpHeaders.add("Error-Message", "Incorrect password, " + e.getMessage());
+
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .headers(httpHeaders)
-                    .body("Incorrect password");
+                    .body("Incorrect password or user with " + user.getName() + " name  isn't exist.");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtCore.generateToken(authentication);
@@ -113,7 +115,7 @@ public class UserController {
         }
         else{
             System.out.println("EXCEPTION  User not found in database!");
-            return "redirect:/user/auth";
+            return "redirect:/user/login";
         }
     }
 
@@ -212,13 +214,13 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .headers(httpHeaders)
-                    .body("User with ID " + id + " has been successfully deleted");
+                    .body("User with id " + id + " has been successfully deleted");
         } catch (Exception e) {
             System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)
-                    .body("Failed to delete user with ID " + id + ": " + e.getMessage());
+                    .body("Failed to delete user with id " + id + ": " + e.getMessage());
         }
     }
 }

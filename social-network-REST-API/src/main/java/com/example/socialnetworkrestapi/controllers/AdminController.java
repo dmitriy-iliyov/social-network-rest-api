@@ -43,7 +43,7 @@ public class AdminController {
 
         try{
             userService.save(AdminRegistrationDTO.toEntity(admin));
-            httpHeaders.setLocation(URI.create("/user/auth"));
+            httpHeaders.setLocation(URI.create("/user/login"));
             return ResponseEntity
                     .status(HttpStatus.SEE_OTHER)
                     .body("Admin successfully created, redirecting...");

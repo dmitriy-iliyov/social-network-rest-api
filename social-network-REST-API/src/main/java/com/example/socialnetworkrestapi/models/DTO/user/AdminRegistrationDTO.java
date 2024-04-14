@@ -20,7 +20,7 @@ public class AdminRegistrationDTO {
                 .password(adminDTO.password)
                 .role(Role.ADMIN)
                 .createDate(Instant.now())
-                .email("-")
+                .email("none")
                 .build();
     }
 }

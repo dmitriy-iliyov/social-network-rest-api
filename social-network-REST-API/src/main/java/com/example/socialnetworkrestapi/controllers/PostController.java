@@ -40,13 +40,6 @@ public class PostController {
         return "post_register_form";
     }
 
-    @GetMapping("/test")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseBody
-    public String test(){
-        return "success";
-    }
-
     @PostMapping("/new")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<String> saveNewPost(@ModelAttribute PostCreatingDTO post) {
@@ -124,13 +117,13 @@ public class PostController {
             postService.deleteById(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .headers(httpHeaders)
-                    .body("Post with ID " + id + " has been successfully deleted");
+                    .body("Post with id " + id + " has been successfully deleted");
         } catch (Exception e) {
             System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)
-                    .body("Failed to delete post with ID " + id);
+                    .body("Failed to delete post with id " + id);
         }
     }
 }

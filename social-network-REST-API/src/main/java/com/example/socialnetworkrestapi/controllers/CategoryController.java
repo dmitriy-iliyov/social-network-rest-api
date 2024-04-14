@@ -102,13 +102,13 @@ public class CategoryController {
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
                     .headers(httpHeaders)
-                    .body("Category with ID " + id + " has been successfully deleted");
+                    .body("Category with id " + id + " has been successfully deleted");
         }catch (Exception e){
             System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)
-                    .body("Failed to delete admin with ID " + id);
+                    .body("Failed to delete admin with id " + id);
         }
     }
 }

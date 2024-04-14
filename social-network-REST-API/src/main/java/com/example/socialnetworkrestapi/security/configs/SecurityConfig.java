@@ -1,7 +1,6 @@
 package com.example.socialnetworkrestapi.security.configs;
 
 
-
 import com.example.socialnetworkrestapi.security.TokenFilter;
 import com.example.socialnetworkrestapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-
 
 @Configuration
 @EnableWebSecurity
