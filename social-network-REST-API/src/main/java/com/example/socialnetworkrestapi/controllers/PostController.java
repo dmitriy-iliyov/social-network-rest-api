@@ -1,20 +1,13 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
 import com.example.socialnetworkrestapi.models.DTO.post.PostCreatingDTO;
 import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
-import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
-import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
-import com.example.socialnetworkrestapi.models.entitys.UserEntity;
-import com.example.socialnetworkrestapi.services.CategoryService;
 import com.example.socialnetworkrestapi.services.PostService;
-import com.example.socialnetworkrestapi.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
