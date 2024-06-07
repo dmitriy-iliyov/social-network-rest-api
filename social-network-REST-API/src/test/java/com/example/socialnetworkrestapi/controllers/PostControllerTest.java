@@ -1,16 +1,32 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.Test;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+import static org.junit.jupiter.api.Assertions.*;
+
 class PostControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Test
+    void addNewPostFormTest() {
+    }
 
+    @Test
+    void saveNewPostTest() {
+    }
 
+    @Test
+    void getPostByIdTest() {
+    }
+
+    @Test
+    void findAllByUserIdOrUserNameOrCategoryIdOrCategoryName() {
+    }
+
+    @Test
+    void getAllPostsTest() {
+    }
+
+    @Test
+    void deletePostTest() {
+    }
 }

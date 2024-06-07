@@ -28,6 +28,7 @@ public class AdminController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/new")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String registerNewAdmin(Model model) {
         model.addAttribute("admin", new AdminRegistrationDTO());
 
@@ -35,6 +36,7 @@ public class AdminController {
     }
 
     @PostMapping("/new")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<String> saveNewAdmin(@ModelAttribute AdminRegistrationDTO admin) {
 
         HttpHeaders httpHeaders = new HttpHeaders();

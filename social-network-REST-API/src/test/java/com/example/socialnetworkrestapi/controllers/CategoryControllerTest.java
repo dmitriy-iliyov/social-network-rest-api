@@ -1,14 +1,32 @@
 package com.example.socialnetworkrestapi.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 class CategoryControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Test
+    void addNewCategoryFormTest() {
+    }
+
+    @Test
+    void saveNewCategoryTest() {
+    }
+
+    @Test
+    void getCategoryByIdOrNameTest() {
+    }
+
+    @Test
+    void getAllCategoriesTest() {
+    }
+
+    @Test
+    void deleteCategoryTest() {
+    }
 }
