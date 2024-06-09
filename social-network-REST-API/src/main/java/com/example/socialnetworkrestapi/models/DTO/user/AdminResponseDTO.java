@@ -4,9 +4,11 @@ import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AdminResponseDTO {
 
     private Long id;

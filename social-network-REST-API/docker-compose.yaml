@@ -15,7 +15,6 @@ services:
         - POSTGRES_URL=jdbc:postgresql://db:5432/database
         - JWT_SECRET=ekfjnrsanfrfwamnkr
         - JWT_LIFETIME=60000
-#        - ARGS="--spring.application.name=social-network-REST-API --spring.datasource.url=jdbc:postgresql://db:5432/database --spring.datasource.username=admin --spring.datasource.password=root --spring.datasource.driver-class-name=org.postgresql.Driver --socialnetworkrestapi.app.secret=ekfjnrsanfrfwamnkr --socialnetworkrestapi.app.lifetime=60000"
       ports:
         - 8080:8080
     db:

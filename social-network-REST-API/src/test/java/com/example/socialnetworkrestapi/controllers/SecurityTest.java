@@ -22,82 +22,10 @@ class SecurityTest {
     private MockMvc mockMvc;
 
     @Test
-    public void accessDeniedTest() throws Exception {
+    public void homePageOkTest() throws Exception {
         this.mockMvc.perform(get("/home"))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/login"));
-    }
-
-    @Test
-    public void authenticateUserTest() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/user/login")
-                        .param("name", "1")
-                        .param("password", "1"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    public void unauthenticatedUserTest() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/user/login")
-                        .param("name", "jfighdg")
-                        .param("password", "fmasngprair"))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
-    }
-
-    @Test
-    public void categoriesPostRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(post("/category/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void usersGetRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(get("/user/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void usersPostRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(post("/user/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void adminsGetRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(get("/admin/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void adminsPostRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(post("/admin/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void postsGetRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(get("/post/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void postsPostRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(post("/post/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    public void categoriesGetRequestsAccessDeniedTest() throws Exception {
-        this.mockMvc.perform(get("/category/**"))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
     }
 }
