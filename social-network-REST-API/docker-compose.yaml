@@ -38,7 +38,6 @@ services:
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
       networks:
         - rabbitmq
-      restart: unless-stopped
 
 networks:
   rabbitmq:
