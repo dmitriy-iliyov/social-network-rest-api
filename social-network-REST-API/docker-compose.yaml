@@ -27,3 +27,19 @@ services:
         POSTGRES_DB: database
       ports:
         - 5432:5432
+    message_broker:
+      image: rabbitmq
+      container_name: rabbitmq
+      ports:
+        - 5672:5672
+        - 15672:15672
+      volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      networks:
+        - rabbitmq
+      restart: unless-stopped
+
+networks:
+  rabbitmq:
+    driver: bridge
