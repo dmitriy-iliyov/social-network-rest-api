@@ -27,11 +27,11 @@ public class AdminController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
+
     @GetMapping("/new")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String registerNewAdmin(Model model) {
         model.addAttribute("admin", new AdminRegistrationDTO());
-
         return "admin_register_form";
     }
 
@@ -41,10 +41,9 @@ public class AdminController {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("X-Info", "Creating admin");
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
         try{
-            userService.save(AdminRegistrationDTO.toEntity(admin));
+            userService.save(admin, passwordEncoder);
             httpHeaders.setLocation(URI.create("/user/login"));
             return ResponseEntity
                     .status(HttpStatus.SEE_OTHER)

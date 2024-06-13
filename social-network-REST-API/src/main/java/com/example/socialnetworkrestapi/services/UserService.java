@@ -1,7 +1,6 @@
 package com.example.socialnetworkrestapi.services;
 
-import com.example.socialnetworkrestapi.models.DTO.user.AdminResponseDTO;
-import com.example.socialnetworkrestapi.models.DTO.user.UserResponseDTO;
+import com.example.socialnetworkrestapi.models.DTO.user.*;
 import com.example.socialnetworkrestapi.models.Role;
 import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import com.example.socialnetworkrestapi.repositorys.UserRepository;
@@ -16,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -32,7 +32,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void save(UserEntity userEntity){
+    public void save(RegistrationDTO userRegistrationDTO, PasswordEncoder passwordEncoder){
+        userRegistrationDTO.setPassword(passwordEncoder.encode(userRegistrationDTO.getPassword()));
+        UserEntity userEntity;
+        if(userRegistrationDTO.getRole() == Role.ADMIN)
+            userEntity = AdminRegistrationDTO.toEntity(userRegistrationDTO);
+        else
+            userEntity = UserRegistrationDTO.toEntity(userRegistrationDTO);
         userRepository.save(userEntity);
     }
 
@@ -82,6 +88,7 @@ public class UserService implements UserDetailsService {
                     userEntity.setName(userResponseDTO.getName());
                     if (!userResponseDTO.getPassword().isEmpty())
                         userEntity.setPassword(passwordEncoder.encode(userResponseDTO.getPassword()));
+
                     userEntity.setEmail(userResponseDTO.getEmail());
                     userRepository.save(userEntity);
                 });

@@ -69,7 +69,7 @@ class AdminControllerTest {
     @WithMockUser(authorities = "ADMIN")
     public void saveNewAdminSeeOtherTest() throws Exception {
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
-        doNothing().when(userService).save(any());
+        doNothing().when(userService).save(any(), any());
 
         mockMvc.perform(post("/admin/new")
                         .flashAttr("admin", adminRegistrationDTO))
@@ -78,20 +78,20 @@ class AdminControllerTest {
                 .andExpect(header().string("Location", "/user/login"))
                 .andExpect(content().string("Admin successfully created, redirecting..."));
 
-        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).save(any(), any());
     }
 
     @Test
     @WithMockUser(authorities = "ADMIN")
     public void saveNewAdminBadRequestTest() throws Exception {
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
-        doThrow(new DataIntegrityViolationException("Admin already exists")).when(userService).save(any());
+        doThrow(new DataIntegrityViolationException("Admin already exists")).when(userService).save(any(), any());
 
         mockMvc.perform(post("/admin/new")
                         .flashAttr("admin", adminRegistrationDTO))
                 .andExpect(status().isBadRequest());
 
-        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).save(any(), any());
     }
 
     @Test

@@ -52,6 +52,7 @@ class UserControllerTest {
         userRegistrationDTO = new UserRegistrationDTO();
         userRegistrationDTO.setName("user");
         userRegistrationDTO.setPassword("password");
+        userRegistrationDTO.setEmail("email@gmail.com");
 
         userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(1L);
@@ -74,7 +75,7 @@ class UserControllerTest {
     @Test
     public void saveNewUserSeeOtherTest() throws Exception{
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
-        doNothing().when(userService).save(any());
+        doNothing().when(userService).save(any(), any());
 
         mockMvc.perform(post("/user/new")
                 .flashAttr("user", userRegistrationDTO))
@@ -83,20 +84,20 @@ class UserControllerTest {
                 .andExpect(header().string("Location", "/user/login"))
                 .andExpect(content().string("User successfully created, redirecting..."));
 
-        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).save(any(), any());
     }
 
     @Test
     public void saveNewUserBadRequestTest() throws Exception{
         when(passwordEncoder.encode(any())).thenReturn("encodedPassword");
-        doThrow(new DataIntegrityViolationException("User already exists")).when(userService).save(any());
+        doThrow(new DataIntegrityViolationException("User already exists")).when(userService).save(any(), any());
         mockMvc.perform(post("/user/new")
                 .flashAttr("user", userRegistrationDTO))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("X-Info", "Creating user failed"));
 
-        verify(userService, times(1)).save(any());
+        verify(userService, times(1)).save(any(), any());
     }
 
     @Test

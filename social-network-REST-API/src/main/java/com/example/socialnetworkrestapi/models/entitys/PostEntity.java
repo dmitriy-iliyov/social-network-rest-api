@@ -19,7 +19,7 @@ public class PostEntity {
     @GeneratedValue(strategy = SEQUENCE, generator = "post_sequence")
     private Long id;
 
-    @Column(name = "topic", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "topic", nullable = false, length = 20, columnDefinition = "TEXT")
     private String topic;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")

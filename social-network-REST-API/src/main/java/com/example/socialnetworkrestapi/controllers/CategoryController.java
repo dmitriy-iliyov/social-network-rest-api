@@ -28,7 +28,6 @@ public class CategoryController {
     @GetMapping("/new")
     public String addNewCategoryForm(Model model){
         model.addAttribute("category", new CategoryCreatingDTO());
-
         return "category_register_form";
     }
 
