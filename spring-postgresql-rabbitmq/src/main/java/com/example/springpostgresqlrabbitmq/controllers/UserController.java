@@ -46,7 +46,7 @@ public class UserController {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .headers(httpHeaders)
-                    .body(htmlTemplate);
+                    .body("htmlTemplate");
         }
         try{
             userService.save(user);

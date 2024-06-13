@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-    api-postgressql:
+    postgressql-api-rabbitmq:
       networks:
         - default
       container_name: api-postgressql
@@ -13,8 +13,6 @@ services:
         - POSTGRES_PASS=root
         - POSTGRES_DB=database
         - POSTGRES_URL=jdbc:postgresql://db:5432/database
-        - JWT_SECRET=ekfjnrsanfrfwamnkr
-        - JWT_LIFETIME=60000
       ports:
         - 8080:8080
     db:
@@ -27,3 +25,18 @@ services:
         POSTGRES_DB: database
       ports:
         - 5432:5432
+    message_broker:
+      image: rabbitmq
+      container_name: rabbitmq
+      ports:
+        - 5672:5672
+        - 15672:15672
+      volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+      networks:
+        - rabbitmq
+
+networks:
+  rabbitmq:
+    driver: bridge
