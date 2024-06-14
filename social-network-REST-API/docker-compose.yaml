@@ -1,9 +1,9 @@
 version: "3.8"
 services:
-    api-postgressql:
+    api-postgresql:
       networks:
         - default
-      container_name: api-postgressql
+      container_name: api-postgresql
       build:
         context: .
         dockerfile: Dockerfile
@@ -11,8 +11,8 @@ services:
         - PORT=8080
         - POSTGRES_USER=admin
         - POSTGRES_PASS=root
-        - POSTGRES_DB=database
-        - POSTGRES_URL=jdbc:postgresql://db:5432/database
+        - POSTGRES_DB=api_postgresql_database
+        - POSTGRES_URL=jdbc:postgresql://db:5432/api_postgresql_database
         - JWT_SECRET=ekfjnrsanfrfwamnkr
         - JWT_LIFETIME=60000
       ports:
@@ -24,6 +24,6 @@ services:
       environment:
         POSTGRES_PASSWORD: root
         POSTGRES_USER: admin
-        POSTGRES_DB: database
+        POSTGRES_DB: api_postgresql_database
       ports:
         - 5432:5432
