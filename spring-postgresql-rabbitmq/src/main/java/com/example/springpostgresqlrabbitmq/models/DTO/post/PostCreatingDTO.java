@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 public class PostCreatingDTO {
@@ -17,10 +19,11 @@ public class PostCreatingDTO {
     private String topic;
     @NotEmpty(message = "description shouldn't be empty")
     private String description;
+    @NotEmpty(message = "user id shouldn't be empty")
     private Long userID;
     private Long categoryID;
 
     public static PostEntity toEntity(PostCreatingDTO postDTO, UserEntity user, CategoryEntity category){
-        return new PostEntity(postDTO.getTopic(), postDTO.getDescription(), user, category);
+        return new PostEntity(Instant.now(), postDTO.getTopic(), postDTO.getDescription(), user, category);
     }
 }

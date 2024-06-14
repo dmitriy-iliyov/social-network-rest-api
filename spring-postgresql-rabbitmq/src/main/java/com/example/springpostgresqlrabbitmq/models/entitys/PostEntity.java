@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -18,6 +20,9 @@ public class PostEntity {
     @SequenceGenerator(name = "post_sequence", sequenceName = "post_sequence", allocationSize = 1)
     @GeneratedValue(strategy = SEQUENCE, generator = "post_sequence")
     private Long id;
+
+    @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
+    private Instant createDate;
 
     @Column(name = "topic", nullable = false, length = 20, columnDefinition = "TEXT")
     private String topic;
@@ -33,7 +38,8 @@ public class PostEntity {
     @JoinColumn(name="category_id")
     private CategoryEntity category;
 
-    public PostEntity(String topic, String description, UserEntity user, CategoryEntity category){
+    public PostEntity(Instant createDate, String topic, String description, UserEntity user, CategoryEntity category){
+        this.createDate = createDate;
         this.topic = topic;
         this.description = description;
         this.user = user;

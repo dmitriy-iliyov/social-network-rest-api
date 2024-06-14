@@ -7,6 +7,9 @@ import com.example.springpostgresqlrabbitmq.models.entitys.UserEntity;
 import com.example.springpostgresqlrabbitmq.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private final AmqpTemplate amqpTemplate;
 
 
     @GetMapping("/new")
@@ -39,29 +44,22 @@ public class UserController {
     public ResponseEntity<Object> saveNewUser(@ModelAttribute("user") @Valid UserRegistrationDTO user,
                                          BindingResult bindingResult){
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-
         if(bindingResult.hasErrors()){
-            httpHeaders.setLocation(URI.create("/user/login"));
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .headers(httpHeaders)
                     .body("htmlTemplate");
         }
         try{
             userService.save(user);
-            httpHeaders.add("X-Info", "Creating user");
-            httpHeaders.setLocation(URI.create("/user/login"));
+            logger.info("Emit to user queue");
+            amqpTemplate.convertAndSend("userQueue", "Creating user successfully");
             return ResponseEntity
-                    .status(HttpStatus.SEE_OTHER)
-                    .headers(httpHeaders)
-                    .body("User successfully created, redirecting...");
+                    .status(HttpStatus.OK)
+                    .body("User successfully created");
         }catch (DataIntegrityViolationException e){
-            httpHeaders.add("X-Info", "Creating user failed");
             System.out.println("EXCEPTION  " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .headers(httpHeaders)
                     .body("User with name " + user.getName() + " already exists");
         }
     }

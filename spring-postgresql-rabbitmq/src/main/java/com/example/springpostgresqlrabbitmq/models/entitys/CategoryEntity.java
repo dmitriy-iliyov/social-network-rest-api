@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -24,10 +25,14 @@ public class CategoryEntity {
     @Column(name = "name", nullable = false, unique = true, length = 20, columnDefinition = "TEXT")
     private String name;
 
+    @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
+    private Instant createDate;
+
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<PostEntity> posts;
 
-    public CategoryEntity(String name){
+    public CategoryEntity(String name, Instant createDate){
         this.name = name;
+        this.createDate = createDate;
     }
 }

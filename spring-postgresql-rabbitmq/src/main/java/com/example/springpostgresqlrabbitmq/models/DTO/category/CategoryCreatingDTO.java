@@ -6,15 +6,17 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 public class CategoryCreatingDTO {
 
     @NotEmpty(message = "category name shouldn't be empty")
-    @Size(min = 1, max = 15, message = "name should be from 1 to 15 characters")
+    @Size(min = 1, max = 20, message = "name should be from 1 to 20 characters")
     private String name;
 
     public static CategoryEntity toEntity(CategoryCreatingDTO categoryDTO){
-        return new CategoryEntity(categoryDTO.getName());
+        return new CategoryEntity(categoryDTO.getName(), Instant.now());
     }
 }
