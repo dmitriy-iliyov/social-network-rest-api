@@ -2,10 +2,12 @@ package com.example.socialnetworkrestapi.models.DTO;
 
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
-public class MessageDTO {
+public class MessageCreatingDTO {
 
     private String resourceName = "spring-postgres-blob";
-    private String uploadTime;
+    private Instant uploadTime;
 
 }

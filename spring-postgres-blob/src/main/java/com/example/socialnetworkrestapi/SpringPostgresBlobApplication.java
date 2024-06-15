@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaRepositories
-public class SocialNetworkRestApiApplication {
+public class SpringPostgresBlobApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SocialNetworkRestApiApplication.class, args);
+        SpringApplication.run(SpringPostgresBlobApplication.class, args);
     }
 
 }

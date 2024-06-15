@@ -1,6 +1,7 @@
 package com.example.socialnetworkrestapi.rabbitmq;
 
 
+import com.example.socialnetworkrestapi.models.DTO.MessageCreatingDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ public class RabbitMQProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public void sendMessageToPhase_1_Queue(){
-        rabbitTemplate.convertAndSend("phase1Queue");
+    public void sendMessageToPostgresQueue(MessageCreatingDTO message){
+        rabbitTemplate.convertAndSend("postgresQueue", message);
     }
 }

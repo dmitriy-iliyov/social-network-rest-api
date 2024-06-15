@@ -12,12 +12,13 @@ import java.util.List;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
+
 @Data
-@Table
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Entity(name="users")
+@Entity
+@Table(name="users")
 public class UserEntity {
 
     @Id

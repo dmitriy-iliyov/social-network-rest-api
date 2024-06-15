@@ -19,7 +19,7 @@ public class RabbitMQConfiguration {
     private String host;
     @Value("${spring.rabbitmq.port}")
     private int port;
-    @Value("${spring.data.rabbitmq.username}")
+    @Value("${spring.rabbitmq.username}")
     private String userName;
     @Value("${spring.rabbitmq.password}")
     private String password;
@@ -52,12 +52,12 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Queue phase1Queue(){
-        return new Queue("phase1Queue");
+    public Queue postgresQueue(){
+        return new Queue("postgresQueue");
     }
 
     @Bean
-    public Queue phase2Queue(){
-        return new Queue("phase2Queue");
+    public Queue mongoQueue(){
+        return new Queue("mongoQueue");
     }
 }

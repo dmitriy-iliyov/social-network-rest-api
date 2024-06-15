@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name="posts")
+@Entity
+@Table(name="posts")
 public class PostEntity {
 
     @Id

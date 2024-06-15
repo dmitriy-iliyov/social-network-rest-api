@@ -11,19 +11,20 @@ services:
         - PORT=8080
         - POSTGRES_USER=admin
         - POSTGRES_PASS=root
-        - POSTGRES_DB=database
-        - POSTGRES_URL=jdbc:postgresql://db:5432/database
+        - POSTGRES_DB=postgresdb
+        - POSTGRES_URL=jdbc:postgresql://db:5432/postgresdb
         - JWT_SECRET=ekfjnrsanfrfwamnkr
         - JWT_LIFETIME=60000
       ports:
         - 8080:8080
     db:
       image: postgres:16.1-alpine3.19
+      container_name: postgresql-container
       networks:
         - default
       environment:
         POSTGRES_PASSWORD: root
         POSTGRES_USER: admin
-        POSTGRES_DB: database
+        POSTGRES_DB: postgresdb
       ports:
         - 5432:5432

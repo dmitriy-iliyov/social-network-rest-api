@@ -25,7 +25,6 @@ public class TemplateEngineConfig {
         return resolver;
     }
 }
-
 //            System.out.println(bindingResult);
 //            Context myContext = new Context();
 //            String htmlTemplate = templateEngine.process("user_register_form", myContext);

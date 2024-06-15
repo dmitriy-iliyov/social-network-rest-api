@@ -10,10 +10,10 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name="categories")
+@Entity
+@Table(name="categories")
 public class CategoryEntity {
 
     @Id
