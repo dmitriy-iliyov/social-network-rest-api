@@ -1,4 +1,4 @@
-package com.example.socialnetworkrestapi.rabbitmq;
+package com.example.socialnetworkrestapi.configs;
 
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
@@ -52,17 +52,12 @@ public class RabbitMQConfiguration {
     }
 
     @Bean
-    public Queue userQueue(){
-        return new Queue("userQueue");
+    public Queue phase1Queue(){
+        return new Queue("phase1Queue");
     }
 
     @Bean
-    public Queue postQueue(){
-        return new Queue("postQueue");
-    }
-
-    @Bean
-    public Queue categoryQueue(){
-        return new Queue("categoryQueue");
+    public Queue phase2Queue(){
+        return new Queue("phase2Queue");
     }
 }

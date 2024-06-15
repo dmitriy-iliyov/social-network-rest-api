@@ -1,4 +1,4 @@
-package com.example.socialnetworkrestapi.security.configs;
+package com.example.socialnetworkrestapi.configs;
 
 
 import com.example.socialnetworkrestapi.security.TokenFilter;
