@@ -29,7 +29,6 @@ public class PostController {
     @PreAuthorize("hasAuthority('USER')")
     public String addNewPostForm(Model model) {
         model.addAttribute("post", new PostCreatingDTO());
-
         return "post_register_form";
     }
 

@@ -25,10 +25,10 @@ public class UserEntity {
     @GeneratedValue(strategy = SEQUENCE, generator = "user_sequence")
     private Long id;
 
-    @Column(name = "name", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "name", nullable = false, length = 10)
     private String name;
 
-    @Column(name = "password", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "password", nullable = false, length = 22, columnDefinition = "TEXT")
     private String password;
 
     @Column(name = "email", nullable = false, unique = true, columnDefinition = "TEXT")
