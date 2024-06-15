@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class MessageDTO {
-    private String resourceName;
+
+    private String resourceName = "spring-postgres-blob";
     private String uploadTime;
 
 }

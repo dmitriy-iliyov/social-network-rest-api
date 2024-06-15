@@ -19,7 +19,7 @@ public class RabbitMQConfiguration {
     private String host;
     @Value("${spring.rabbitmq.port}")
     private int port;
-    @Value("${spring.data.mongodb.username}")
+    @Value("${spring.data.rabbitmq.username}")
     private String userName;
     @Value("${spring.rabbitmq.password}")
     private String password;
