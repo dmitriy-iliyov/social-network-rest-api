@@ -1,9 +1,8 @@
-package com.example.consumer_service.services;
+package com.example.socialnetworkrestapi.services;
 
-import com.example.consumer_service.models.DTO.category.CategoryCreatingDTO;
-import com.example.consumer_service.models.DTO.category.CategoryResponseDTO;
-import com.example.consumer_service.models.entitys.CategoryEntity;
-import com.example.consumer_service.repositorys.CategoryRepository;
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.repositorys.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +18,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void save(CategoryCreatingDTO categoryCreatingDTO){
-        categoryRepository.save(CategoryCreatingDTO.toEntity(categoryCreatingDTO));
+    public void save(CategoryEntity categoryEntity){
+        categoryRepository.save(categoryEntity);
     }
 
     @Transactional

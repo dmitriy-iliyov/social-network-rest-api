@@ -1,6 +1,7 @@
-package com.example.consumer_service.repositorys;
+package com.example.socialnetworkrestapi.repositorys;
 
-import com.example.consumer_service.models.entitys.UserEntity;
+import com.example.socialnetworkrestapi.models.Role;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     boolean existsUserEntityByName(String name);
 
-    void deleteByName(String name);
+    Iterable<UserEntity> findAllByRole(Role role);
+
+    void deleteByNameAndPassword(String name, String password);
 }

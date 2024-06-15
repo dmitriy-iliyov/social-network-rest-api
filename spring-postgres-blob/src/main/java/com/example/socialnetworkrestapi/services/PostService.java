@@ -1,10 +1,10 @@
-package com.example.consumer_service.services;
+package com.example.socialnetworkrestapi.services;
 
-import com.example.consumer_service.models.DTO.post.PostCreatingDTO;
-import com.example.consumer_service.models.DTO.post.PostResponseDTO;
-import com.example.consumer_service.models.entitys.CategoryEntity;
-import com.example.consumer_service.models.entitys.UserEntity;
-import com.example.consumer_service.repositorys.PostRepository;
+import com.example.socialnetworkrestapi.models.DTO.post.PostCreatingDTO;
+import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
+import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
+import com.example.socialnetworkrestapi.models.entitys.UserEntity;
+import com.example.socialnetworkrestapi.repositorys.PostRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -24,8 +24,8 @@ public class PostService {
 
     @Transactional
     public void save(PostCreatingDTO post) throws ChangeSetPersister.NotFoundException {
-        UserEntity userEntity = userService.findEntityById(post.getUserId()).orElse(null);
-        CategoryEntity categoryEntity = categoryService.findById(post.getCategoryId()).orElse(null);
+        UserEntity userEntity = userService.findEntityById(post.getUserID()).orElse(null);
+        CategoryEntity categoryEntity = categoryService.findById(post.getCategoryID()).orElse(null);
         if(userEntity != null && categoryEntity != null){
             postRepository.save(PostCreatingDTO.toEntity(post, userEntity, categoryEntity));
         }

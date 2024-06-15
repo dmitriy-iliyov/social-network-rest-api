@@ -1,6 +1,6 @@
-package com.example.consumer_service.repositorys;
+package com.example.socialnetworkrestapi.repositorys;
 
-import com.example.consumer_service.models.entitys.PostEntity;
+import com.example.socialnetworkrestapi.models.entitys.PostEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
