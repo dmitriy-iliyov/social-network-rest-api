@@ -1,5 +1,6 @@
 package com.example.socialnetworkrestapi.services;
 
+import com.example.socialnetworkrestapi.models.DTO.category.CategoryCreatingDTO;
 import com.example.socialnetworkrestapi.models.DTO.category.CategoryResponseDTO;
 import com.example.socialnetworkrestapi.models.entitys.CategoryEntity;
 import com.example.socialnetworkrestapi.repositorys.CategoryRepository;
@@ -18,8 +19,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional
-    public void save(CategoryEntity categoryEntity){
-        categoryRepository.save(categoryEntity);
+    public void save(CategoryCreatingDTO categoryCreatingDTO){
+        categoryRepository.save(CategoryCreatingDTO.toEntity(categoryCreatingDTO));
     }
 
     @Transactional

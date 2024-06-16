@@ -4,6 +4,8 @@ import com.example.socialnetworkrestapi.models.DTO.post.PostCreatingDTO;
 import com.example.socialnetworkrestapi.models.DTO.post.PostResponseDTO;
 import com.example.socialnetworkrestapi.services.PostService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class PostController {
 
     private final PostService postService;
+    private final Logger logger = LoggerFactory.getLogger(PostController.class);
 
 
     @GetMapping("/new")
@@ -41,16 +44,17 @@ public class PostController {
 
         try {
              postService.save(post);
+             logger.info("Post successfully created : " + post);
              return ResponseEntity
                      .status(HttpStatus.CREATED)
                      .headers(httpHeaders)
-                     .body("Post successfully created");
+                     .body("Post successfully created.");
         } catch (ChangeSetPersister.NotFoundException e){
-            System.out.println("EXCEPTION  " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity
                      .status(HttpStatus.NOT_FOUND)
                      .headers(httpHeaders)
-                     .body("User or category doesn't exist");
+                     .body("User or category doesn't exist.");
         }
     }
 
@@ -108,15 +112,16 @@ public class PostController {
 
         try {
             postService.deleteById(id);
+            logger.info("Post with id " + id + " has been successfully deleted.");
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .headers(httpHeaders)
-                    .body("Post with id " + id + " has been successfully deleted");
+                    .body("Post with id " + id + " has been successfully deleted.");
         } catch (Exception e) {
-            System.out.println("EXCEPTION  " + e.getMessage());
+            logger.error(e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .headers(httpHeaders)
-                    .body("Failed to delete post with id " + id);
+                    .body("Failed to delete post with id " + id + ".");
         }
     }
 }
