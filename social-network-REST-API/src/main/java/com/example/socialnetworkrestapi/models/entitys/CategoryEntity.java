@@ -21,7 +21,7 @@ public class CategoryEntity {
     @GeneratedValue(strategy = SEQUENCE, generator = "categories_sequence")
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true, length = 20, columnDefinition = "TEXT")
+    @Column(name = "name", nullable = false, unique = true, length = 20)
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)

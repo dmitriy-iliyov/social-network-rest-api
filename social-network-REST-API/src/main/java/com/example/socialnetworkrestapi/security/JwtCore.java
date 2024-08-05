@@ -6,7 +6,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 
-
 import java.util.Date;
 import java.util.stream.Collectors;
 

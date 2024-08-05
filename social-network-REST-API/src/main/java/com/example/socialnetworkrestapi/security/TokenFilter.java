@@ -17,6 +17,7 @@ import java.io.IOException;
 
 @Component
 public class TokenFilter extends OncePerRequestFilter {
+
     private final JwtCore jwtCore;
     private final UserDetailsService userDetailsService;
 

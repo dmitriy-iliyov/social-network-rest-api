@@ -19,10 +19,10 @@ public class PostEntity {
     @GeneratedValue(strategy = SEQUENCE, generator = "post_sequence")
     private Long id;
 
-    @Column(name = "topic", nullable = false, length = 20, columnDefinition = "TEXT")
+    @Column(name = "topic", nullable = false, length = 20)
     private String topic;
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "description", nullable = false)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

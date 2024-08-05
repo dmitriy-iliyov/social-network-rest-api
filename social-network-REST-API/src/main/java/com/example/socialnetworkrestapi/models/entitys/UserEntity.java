@@ -13,11 +13,11 @@ import java.util.List;
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Data
-@Table
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name="users")
+@Entity
+@Table(name="users")
 public class UserEntity {
 
     @Id
@@ -28,13 +28,13 @@ public class UserEntity {
     @Column(name = "name", nullable = false, length = 10)
     private String name;
 
-    @Column(name = "password", nullable = false, length = 22, columnDefinition = "TEXT")
+    @Column(name = "password", nullable = false, length = 22)
     private String password;
 
-    @Column(name = "email", nullable = false, unique = true, columnDefinition = "TEXT")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "create_date", nullable = false, columnDefinition = "DATE")
+    @Column(name = "create_date", nullable = false)
     private Instant createDate;
 
     @Column(name = "role", nullable = false)
